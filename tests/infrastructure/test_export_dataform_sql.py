@@ -96,7 +96,9 @@ def test_dataform_toolchain_and_security_override_are_lockfile_pinned() -> None:
     assert package["dependencies"]["@dataform/core"] == "3.0.61"
     assert package["devDependencies"]["@dataform/cli"] == "3.0.61"
     assert package["overrides"]["parse-duration"] == "2.1.3"
+    assert package["overrides"]["vm2"] == "3.11.6"
     assert lock["packages"]["node_modules/parse-duration"]["version"] == "2.1.3"
+    assert lock["packages"]["node_modules/vm2"]["version"] == "3.11.6"
 
 
 def test_dataform_profile_uses_lockfile_mode_and_exports_cost_gate_sql() -> None:
