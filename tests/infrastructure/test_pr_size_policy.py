@@ -39,13 +39,13 @@ class PullRequestSizePolicyTests(unittest.TestCase):
     def test_authenticated_template_sync_may_exceed_only_numeric_limit(self) -> None:
         authenticated = is_authenticated_template_sync(
             pr_author="github-actions[bot]",
-            head_repository="Yukihide-Mitsuoka/secure-ga4-bq-template",
-            target_repository="Yukihide-Mitsuoka/secure-ga4-bq-template",
+            head_repository="ea-Mitsuoka/secure-ga4-bq-template",
+            target_repository="ea-Mitsuoka/secure-ga4-bq-template",
             head_ref="chore/template_sync_3726fbb",
             base_ref="main",
             pr_body=(
                 "Direct-parent-source: "
-                "https://github.com/Yukihide-Mitsuoka/terraform-gcp-template@" + "a" * 40
+                "https://github.com/ea-Mitsuoka/terraform-gcp-template@" + "a" * 40
             ),
         )
 
@@ -57,13 +57,13 @@ class PullRequestSizePolicyTests(unittest.TestCase):
     def test_template_sync_authentication_fails_closed(self) -> None:
         valid = {
             "pr_author": "github-actions[bot]",
-            "head_repository": "Yukihide-Mitsuoka/secure-ga4-bq-template",
-            "target_repository": "Yukihide-Mitsuoka/secure-ga4-bq-template",
+            "head_repository": "ea-Mitsuoka/secure-ga4-bq-template",
+            "target_repository": "ea-Mitsuoka/secure-ga4-bq-template",
             "head_ref": "chore/template_sync_3726fbb",
             "base_ref": "main",
             "pr_body": (
                 "Direct-parent-source: "
-                "https://github.com/Yukihide-Mitsuoka/terraform-gcp-template@" + "a" * 40
+                "https://github.com/ea-Mitsuoka/terraform-gcp-template@" + "a" * 40
             ),
         }
         invalid_overrides = (
@@ -77,7 +77,7 @@ class PullRequestSizePolicyTests(unittest.TestCase):
             {
                 "pr_body": (
                     "Direct-parent-source: "
-                    "https://github.com/Yukihide-Mitsuoka/terraform-gcp-template@" + "a" * 39
+                    "https://github.com/ea-Mitsuoka/terraform-gcp-template@" + "a" * 39
                 )
             },
         )

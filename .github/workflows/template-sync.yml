@@ -73,7 +73,7 @@ jobs:
           SOURCE_AUTH: ${{ vars.TEMPLATE_SYNC_SOURCE_AUTH || 'public' }}
           HAS_SOURCE_APP_CLIENT_ID: ${{ vars.TEMPLATE_SYNC_SOURCE_APP_CLIENT_ID != '' }}
           HAS_SOURCE_APP_PRIVATE_KEY: ${{ secrets.TEMPLATE_SYNC_SOURCE_APP_PRIVATE_KEY != '' }}
-          SOURCE_REPOSITORY: "Yukihide-Mitsuoka/terraform-gcp-template"
+          SOURCE_REPOSITORY: "ea-Mitsuoka/terraform-gcp-template"
         run: |
           set -euo pipefail
           source_auth="$(python3 scripts/template_sync_auth.py \
@@ -103,8 +103,8 @@ jobs:
           target_gh_token: ${{ github.token }}
           # This repo syncs from terraform-gcp-template (its direct parent). Downstream
           # engagement repos created from THIS template must repoint this to
-          # Yukihide-Mitsuoka/secure-ga4-bq-template.
-          source_repo_path: "Yukihide-Mitsuoka/terraform-gcp-template"
+          # ea-Mitsuoka/secure-ga4-bq-template.
+          source_repo_path: "ea-Mitsuoka/terraform-gcp-template"
           upstream_branch: main
           pr_title: "build: sync with terraform-gcp-template"
           pr_body: >-
@@ -121,7 +121,7 @@ jobs:
           GH_TOKEN: ${{ steps.source-app-token.outputs.token || github.token }}
           PR_BRANCH: ${{ steps.template-sync.outputs.pr_branch }}
           SOURCE_SHORT: ${{ steps.template-sync.outputs.template_git_hash }}
-          SOURCE_REPOSITORY: "Yukihide-Mitsuoka/terraform-gcp-template"
+          SOURCE_REPOSITORY: "ea-Mitsuoka/terraform-gcp-template"
         run: |
           set -euo pipefail
           if [[ -z "$SOURCE_SHORT" ]]; then
@@ -145,7 +145,7 @@ jobs:
           PR_NUMBER: ${{ steps.template-sync.outputs.pr_number }}
           PR_BRANCH: ${{ steps.template-sync.outputs.pr_branch }}
           SOURCE_COMMIT: ${{ steps.source-provenance.outputs.commit }}
-          SOURCE_REPOSITORY: "Yukihide-Mitsuoka/terraform-gcp-template"
+          SOURCE_REPOSITORY: "ea-Mitsuoka/terraform-gcp-template"
         run: |
           set -euo pipefail
           if [[ -z "$PR_NUMBER" ]]; then

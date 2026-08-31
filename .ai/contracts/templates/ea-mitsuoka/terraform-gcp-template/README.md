@@ -7,7 +7,7 @@ updated: 2026-08-08
 # Terraform Family Child Contract
 
 `inheritance-export.json` is the machine-readable ownership and agent-input contract for
-new direct children of `Yukihide-Mitsuoka/terraform-gcp-template`. The Foundation
+new direct children of `ea-Mitsuoka/terraform-gcp-template`. The Foundation
 `bootstrap-child` command reads this file from the exact parent source commit.
 
 The export passes the Foundation contract and this Terraform family overlay to a child.

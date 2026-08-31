@@ -1,14 +1,14 @@
 {
   "schema_version": 2,
   "parent": {
-    "repository": "Yukihide-Mitsuoka/terraform-gcp-template",
+    "repository": "ea-Mitsuoka/terraform-gcp-template",
     "branch": "main"
   },
   "lock_file": ".github/inheritance/lock.json",
   "inherited_paths": [
     ".ai/README.md",
     ".ai/contracts/foundation/",
-    ".ai/contracts/templates/yukihide-mitsuoka/terraform-gcp-template/",
+    ".ai/contracts/templates/ea-mitsuoka/terraform-gcp-template/",
     ".ai/coding-rules.md",
     ".ai/documentation.md",
     ".ai/project-document-maintenance.md",
