@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.0](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/compare/v2.11.5...v3.0.0) (2026-08-31)
+
+
+### ⚠ BREAKING CHANGES
+
+* **inheritance:** merge the parent PR ea-Mitsuoka/terraform-gcp-template#2 first. Between the two merges the declared contract root and the path the parent publishes disagree.
+
+### Miscellaneous Chores
+
+* **inheritance:** repoint direct parent and contract root to ea-Mitsuoka ([a65d1bc](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/commit/a65d1bca913c598395d1198acef6a99eb75b0624)), closes [#1](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/issues/1)
+
 ## [2.11.5](https://github.com/Yukihide-Mitsuoka/secure-ga4-bq-template/compare/v2.11.4...v2.11.5) (2026-08-31)
 
 
