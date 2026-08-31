@@ -125,7 +125,7 @@ variable "data_policies" {
 variable "github_repository" {
   description = "GitHub repository (owner/name) whose workflows may impersonate the deployer and inspector SAs. Engagement instances MUST override this with their own repo."
   type        = string
-  default     = "Yukihide-Mitsuoka/secure-ga4-bq-template"
+  default     = "ea-Mitsuoka/secure-ga4-bq-template"
 }
 
 variable "github_workload_identity_pool_id" {

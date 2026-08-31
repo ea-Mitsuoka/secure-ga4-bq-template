@@ -37,8 +37,8 @@ merging the Release PR because REL-010 reserves release approval for a human.
 1. Enable the checked-in workflow:
 
    ```bash
-   gh workflow enable Release --repo Yukihide-Mitsuoka/secure-ga4-bq-template
-   gh workflow view Release --repo Yukihide-Mitsuoka/secure-ga4-bq-template
+   gh workflow enable Release --repo ea-Mitsuoka/secure-ga4-bq-template
+   gh workflow view Release --repo ea-Mitsuoka/secure-ga4-bq-template
    ```
 
    - Expect: `Release` reports an active state.
@@ -52,14 +52,14 @@ merging the Release PR because REL-010 reserves release approval for a human.
 
    ```bash
    gh release list \
-     --repo Yukihide-Mitsuoka/secure-ga4-bq-template \
+     --repo ea-Mitsuoka/secure-ga4-bq-template \
      --limit 1 \
      --json tagName,publishedAt
    ```
 
    ```bash
    gh workflow run Release \
-     --repo Yukihide-Mitsuoka/secure-ga4-bq-template \
+     --repo ea-Mitsuoka/secure-ga4-bq-template \
      --ref main
    ```
 
@@ -71,14 +71,14 @@ merging the Release PR because REL-010 reserves release approval for a human.
 
    ```bash
    RUN_ID="$(gh run list \
-     --repo Yukihide-Mitsuoka/secure-ga4-bq-template \
+     --repo ea-Mitsuoka/secure-ga4-bq-template \
      --workflow Release \
      --event workflow_dispatch \
      --limit 1 \
      --json databaseId \
      --jq '.[0].databaseId')"
    gh run watch "$RUN_ID" \
-     --repo Yukihide-Mitsuoka/secure-ga4-bq-template \
+     --repo ea-Mitsuoka/secure-ga4-bq-template \
      --exit-status
    ```
 
@@ -96,7 +96,7 @@ merging the Release PR because REL-010 reserves release approval for a human.
 
    ```bash
    gh release list \
-     --repo Yukihide-Mitsuoka/secure-ga4-bq-template \
+     --repo ea-Mitsuoka/secure-ga4-bq-template \
      --limit 1 \
      --json tagName,publishedAt
    ```
@@ -109,7 +109,7 @@ merging the Release PR because REL-010 reserves release approval for a human.
 
    ```bash
    gh pr list \
-     --repo Yukihide-Mitsuoka/secure-ga4-bq-template \
+     --repo ea-Mitsuoka/secure-ga4-bq-template \
      --search 'is:open label:"autorelease: pending"' \
      --json number,title,url,headRefName
    ```
@@ -138,7 +138,7 @@ merging the Release PR because REL-010 reserves release approval for a human.
 
    ```bash
    gh run list \
-     --repo Yukihide-Mitsuoka/secure-ga4-bq-template \
+     --repo ea-Mitsuoka/secure-ga4-bq-template \
      --workflow Release \
      --event push \
      --limit 1 \
@@ -153,12 +153,12 @@ merging the Release PR because REL-010 reserves release approval for a human.
 
    ```bash
    TAG="$(gh release list \
-     --repo Yukihide-Mitsuoka/secure-ga4-bq-template \
+     --repo ea-Mitsuoka/secure-ga4-bq-template \
      --limit 1 \
      --json tagName \
      --jq '.[0].tagName')"
    gh release view "$TAG" \
-     --repo Yukihide-Mitsuoka/secure-ga4-bq-template \
+     --repo ea-Mitsuoka/secure-ga4-bq-template \
      --json tagName,isDraft,isPrerelease,assets,url
    ```
 
