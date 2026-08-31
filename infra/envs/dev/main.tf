@@ -20,7 +20,7 @@ locals {
 }
 
 module "layer_datasets" {
-  source   = "git::https://github.com/Yukihide-Mitsuoka/terraform-gcp-modules.git//modules/bigquery-dataset?ref=v0.3.0"
+  source   = "git::https://github.com/ea-Mitsuoka/terraform-gcp-modules.git//modules/bigquery-dataset?ref=v0.3.0"
   for_each = local.layers
 
   project_id  = var.project_id
@@ -32,7 +32,7 @@ module "layer_datasets" {
 }
 
 module "sensitivity" {
-  source = "git::https://github.com/Yukihide-Mitsuoka/terraform-gcp-modules.git//modules/bigquery-policy-tags?ref=v0.3.0"
+  source = "git::https://github.com/ea-Mitsuoka/terraform-gcp-modules.git//modules/bigquery-policy-tags?ref=v0.3.0"
 
   project_id            = var.project_id
   location              = lower(var.region)
@@ -44,7 +44,7 @@ module "sensitivity" {
 # access-control-only path. Dataset readers and query-job permissions stay engagement
 # owned; this module grants only masked-reader access to the named data policy.
 module "data_policy" {
-  source   = "git::https://github.com/Yukihide-Mitsuoka/terraform-gcp-modules.git//modules/bigquery-data-policy?ref=v0.4.0"
+  source   = "git::https://github.com/ea-Mitsuoka/terraform-gcp-modules.git//modules/bigquery-data-policy?ref=v0.4.0"
   for_each = var.data_policies
 
   project_id            = var.project_id
