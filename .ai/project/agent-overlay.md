@@ -11,7 +11,7 @@ This protected project layer contains repository identity and stack facts only. 
 explicit agent profile loads it after the inherited foundation and Terraform template
 contracts.
 
-- Repository: `Yukihide-Mitsuoka/secure-ga4-bq-template`.
+- Repository: `ea-Mitsuoka/secure-ga4-bq-template`.
 - Role: reusable template that builds and inspects governed GA4-to-BigQuery mart layers.
 - Stack: Terraform 1.5 or later and Python 3.12 through uv; BigQuery stores governed
   marts while the inspection engine remains stateless.

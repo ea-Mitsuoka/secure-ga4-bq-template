@@ -26,7 +26,7 @@ class ContextBudgetTest(unittest.TestCase):
         self.assertIn(context_budget.CANONICAL_GUARDRAILS, report["baseline_files"])
         self.assertIn(".ai/contracts/foundation/agent-entry.md", report["baseline_files"])
         self.assertIn(
-            ".ai/contracts/templates/yukihide-mitsuoka/terraform-gcp-template/agent-overlay.md",
+            ".ai/contracts/templates/ea-mitsuoka/terraform-gcp-template/agent-overlay.md",
             report["baseline_files"],
         )
         self.assertIn(".ai/project/agent-overlay.md", report["baseline_files"])

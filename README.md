@@ -1,6 +1,6 @@
 # secure-ga4-bq-template
 
-<!-- repository-readme-owner: Yukihide-Mitsuoka/secure-ga4-bq-template -->
+<!-- repository-readme-owner: ea-Mitsuoka/secure-ga4-bq-template -->
 
 > 初めて読む方は、[全体像・できること・要件定義](docs/requirements/README.md)を確認してから、
 > [日本語の利用ガイド](docs/usage.md)に沿って案件リポジトリを準備してください。
@@ -8,8 +8,8 @@
 **Secure standard asset for GA4→BigQuery** — a template repository for engagements that
 build or inspect GA4→BQ **mart layers** around three security controls:
 ① column-level security (policy tags) ② least-privilege IAM ③ cost-optimized audit
-logging. Built on [terraform-gcp-template](https://github.com/Yukihide-Mitsuoka/terraform-gcp-template)
-(which is built on [ai-dev-foundation](https://github.com/Yukihide-Mitsuoka/ai-dev-foundation)).
+logging. Built on [terraform-gcp-template](https://github.com/ea-Mitsuoka/terraform-gcp-template)
+(which is built on [ai-dev-foundation](https://github.com/ea-Mitsuoka/ai-dev-foundation)).
 
 > **AI agents:** stop reading this file. Your entry point is [CLAUDE.md](CLAUDE.md)
 > (Claude Code) or [AGENTS.md](AGENTS.md) (everyone else). Requirements live in
@@ -22,7 +22,7 @@ safety boundaries, is available in the [Japanese usage guide](docs/usage.md).
 
 1. **Create the engagement repo**: GitHub → "Use this template".
 2. **Repoint template sync**: in `.github/workflows/template-sync.yml`, change
-   `source_repo_path` to `Yukihide-Mitsuoka/secure-ga4-bq-template`; set the repo variable
+   `source_repo_path` to `ea-Mitsuoka/secure-ga4-bq-template`; set the repo variable
    `TEMPLATE_SYNC_ENABLED=true`.
 3. **Replace placeholders**: `grep -rn "{{" . --exclude-dir=.git` — engagement parameters
    (sensitivity-catalog overrides, unnest keys, IAM principals, audit-log scope) are the
@@ -51,7 +51,7 @@ ai-dev-foundation ─sync▶ terraform-gcp-template ─sync▶ secure-ga4-bq-tem
 | Decision | Rule |
 |----------|------|
 | New GA4→BQ secure-mart engagement? | "Use this template" **here** — one repo per engagement |
-| Plain GCP/Terraform project (no GA4 asset)? | Use [terraform-gcp-template](https://github.com/Yukihide-Mitsuoka/terraform-gcp-template) |
+| Plain GCP/Terraform project (no GA4 asset)? | Use [terraform-gcp-template](https://github.com/ea-Mitsuoka/terraform-gcp-template) |
 | Reusable Terraform building blocks | [terraform-gcp-modules](https://github.com/Yukihide-Mitsuoka/terraform-gcp-modules), referenced by tag, never copied |
 | Reusable CI/CD (inspection and cost gate) | [gcp-cicd-workflows](https://github.com/Yukihide-Mitsuoka/gcp-cicd-workflows), BQ Inspect at `v1` and cost gate at `v2.0.2` |
 | Base updates | terraform-gcp-template changes arrive as sync PRs ([template-sync.yml](.github/workflows/template-sync.yml)); engagement repos repoint their sync source to THIS repo |

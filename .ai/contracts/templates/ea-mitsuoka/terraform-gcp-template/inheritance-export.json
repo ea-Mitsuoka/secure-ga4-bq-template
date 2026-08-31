@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "repository": "Yukihide-Mitsuoka/terraform-gcp-template",
+  "repository": "ea-Mitsuoka/terraform-gcp-template",
   "branch": "main",
   "inherited_paths": [
     ".ai/README.md",
     ".ai/guardrails.md",
     ".ai/contracts/foundation/",
-    ".ai/contracts/templates/yukihide-mitsuoka/terraform-gcp-template/",
+    ".ai/contracts/templates/ea-mitsuoka/terraform-gcp-template/",
     ".ai/documentation.md",
     ".ai/project-document-maintenance.md",
     ".ai/release.md",
@@ -86,13 +86,13 @@
   "agent_inputs": [
     {
       "layer": "foundation",
-      "repository": "Yukihide-Mitsuoka/ai-dev-foundation",
+      "repository": "ea-Mitsuoka/ai-dev-foundation",
       "path": ".ai/contracts/foundation/agent-entry.md"
     },
     {
       "layer": "template",
-      "repository": "Yukihide-Mitsuoka/terraform-gcp-template",
-      "path": ".ai/contracts/templates/yukihide-mitsuoka/terraform-gcp-template/agent-overlay.md"
+      "repository": "ea-Mitsuoka/terraform-gcp-template",
+      "path": ".ai/contracts/templates/ea-mitsuoka/terraform-gcp-template/agent-overlay.md"
     }
   ]
 }

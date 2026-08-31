@@ -28,7 +28,7 @@ class TemplateSyncWorkflowTest(unittest.TestCase):
         self.assertIn("id: template-sync", workflow)
         self.assertIn("steps.template-sync.outputs.pr_branch", workflow)
         self.assertIn(
-            'SOURCE_REPOSITORY: "Yukihide-Mitsuoka/terraform-gcp-template"',
+            'SOURCE_REPOSITORY: "ea-Mitsuoka/terraform-gcp-template"',
             workflow,
         )
         self.assertIn(

@@ -43,7 +43,7 @@ description、昇格列の由来宣言などを評価します。正式な要件
 1. GitHub で `secure-ga4-bq-template` を開き、**Use this template** を選ぶ。
 2. 案件用リポジトリを作成して clone する。
 3. `.github/workflows/template-sync.yml` の `source_repo_path` を
-   `Yukihide-Mitsuoka/secure-ga4-bq-template` に変更する。
+   `ea-Mitsuoka/secure-ga4-bq-template` に変更する。
 4. `{{...}}` のプレースホルダーを検索し、案件の値に置き換える。
 5. ローカルゲートを導入し、クラウド認証なしで初期状態を検証する。
 
