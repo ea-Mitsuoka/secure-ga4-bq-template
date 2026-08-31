@@ -8,7 +8,7 @@
 # Its custom role, however, IS a library module (design §A-5): bq-inspector-role.
 
 module "github_oidc" {
-  source = "git::https://github.com/Yukihide-Mitsuoka/terraform-gcp-modules.git//modules/github-oidc?ref=v0.3.0"
+  source = "git::https://github.com/ea-Mitsuoka/terraform-gcp-modules.git//modules/github-oidc?ref=v0.3.0"
 
   project_id         = var.project_id
   github_repository  = var.github_repository
@@ -39,7 +39,7 @@ resource "google_service_account_iam_member" "inspector_workload_identity_user" 
 # ADR-0003 selected REST metadata only, so override the shared module's broader
 # INFORMATION_SCHEMA-ready default and omit bigquery.jobs.create.
 module "inspector_role" {
-  source = "git::https://github.com/Yukihide-Mitsuoka/terraform-gcp-modules.git//modules/bq-inspector-role?ref=v0.4.0"
+  source = "git::https://github.com/ea-Mitsuoka/terraform-gcp-modules.git//modules/bq-inspector-role?ref=v0.4.0"
 
   project_id         = var.project_id
   inspector_sa_email = google_service_account.inspector.email

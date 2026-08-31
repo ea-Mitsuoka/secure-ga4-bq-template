@@ -52,8 +52,8 @@ ai-dev-foundation ─sync▶ terraform-gcp-template ─sync▶ secure-ga4-bq-tem
 |----------|------|
 | New GA4→BQ secure-mart engagement? | "Use this template" **here** — one repo per engagement |
 | Plain GCP/Terraform project (no GA4 asset)? | Use [terraform-gcp-template](https://github.com/ea-Mitsuoka/terraform-gcp-template) |
-| Reusable Terraform building blocks | [terraform-gcp-modules](https://github.com/Yukihide-Mitsuoka/terraform-gcp-modules), referenced by tag, never copied |
-| Reusable CI/CD (inspection and cost gate) | [gcp-cicd-workflows](https://github.com/Yukihide-Mitsuoka/gcp-cicd-workflows), BQ Inspect at `v1` and cost gate at `v2.0.2` |
+| Reusable Terraform building blocks | [terraform-gcp-modules](https://github.com/ea-Mitsuoka/terraform-gcp-modules), referenced by tag, never copied |
+| Reusable CI/CD (inspection and cost gate) | [gcp-cicd-workflows](https://github.com/ea-Mitsuoka/gcp-cicd-workflows), BQ Inspect at `v1` and cost gate at `v2.0.2` |
 | Base updates | terraform-gcp-template changes arrive as sync PRs ([template-sync.yml](.github/workflows/template-sync.yml)); engagement repos repoint their sync source to THIS repo |
 
 ## What this adds on top of terraform-gcp-template

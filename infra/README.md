@@ -12,8 +12,8 @@ title: Terraform layout
 Rules:
 
 - **Modules are referenced, never vendored.** Building blocks come from
-  [terraform-gcp-modules](https://github.com/Yukihide-Mitsuoka/terraform-gcp-modules)
-  pinned by tag: `source = "git::https://github.com/Yukihide-Mitsuoka/terraform-gcp-modules.git//modules/<name>?ref=vX.Y.Z"`.
+  [terraform-gcp-modules](https://github.com/ea-Mitsuoka/terraform-gcp-modules)
+  pinned by tag: `source = "git::https://github.com/ea-Mitsuoka/terraform-gcp-modules.git//modules/<name>?ref=vX.Y.Z"`.
   Upgrading = bumping `?ref=` in a reviewed PR. Do not copy module code into this repo;
   a module worth writing is worth contributing to the library.
 - Truly project-specific glue (a one-off resource, a local wrapper) may live beside the
