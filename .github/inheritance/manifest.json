@@ -92,6 +92,7 @@
     "docs/api/",
     "docs/architecture/",
     "docs/deployment/",
+    "docs/handoff.md",
     "docs/development-handoff.md",
     "docs/glossary.md",
     "docs/requirements/",
