@@ -1,7 +1,7 @@
 variable "github_repository_id" {
   description = "Immutable numeric GitHub repository ID whose callers may use the cost-gate identity. Engagement instances MUST override this with their own repository ID."
   type        = string
-  default     = "1296879276"
+  default     = "1352760494"
 
   validation {
     condition     = can(regex("^[0-9]+$", var.github_repository_id))
