@@ -41,6 +41,7 @@
     "SECURITY.md",
     "renovate.json",
     "scripts/actions/",
+    "scripts/pr_language_policy.py",
     "scripts/template_sync_auth.py",
     "docs/foundation/"
   ],

@@ -9,6 +9,7 @@ catalog/**
 scripts/**
 :!scripts/actions/
 :!scripts/actions/**
+:!scripts/pr_language_policy.py
 service-packages/**
 CLAUDE.md
 README.md
