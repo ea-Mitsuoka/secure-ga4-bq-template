@@ -418,7 +418,7 @@ def test_finalization_apply_updates_only_lock_and_is_idempotent(finalization_rep
     result = finalization_repos.apply()
 
     assert result["status"] == "finalized"
-    assert result["changes"] == {"lock_updated": True, "manual_ported": []}
+    assert result["changes"] == {"lock_updated": True}
     lock = json.loads(
         (finalization_repos.child / ".github/inheritance/lock.json").read_text(encoding="utf-8")
     )
