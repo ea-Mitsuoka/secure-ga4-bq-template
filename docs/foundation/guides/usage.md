@@ -33,9 +33,9 @@ Use the closest maintained template whose exported contract applies to the repos
 
 | Current repository role | Direct parent |
 |-------------------------|---------------|
-| General project with no applicable maintained specialization | `Yukihide-Mitsuoka/ai-dev-foundation` |
-| Terraform-managed Google Cloud infrastructure is the primary deliverable and the Terraform family overlay plus `iac-scan` are required | `Yukihide-Mitsuoka/terraform-gcp-template` |
-| A Next.js SaaS application needs the maintained Next.js family and SaaS template contract | `Yukihide-Mitsuoka/nextjs-saas-template` |
+| General project with no applicable maintained specialization | `ea-Mitsuoka/ai-dev-foundation` |
+| Terraform-managed Google Cloud infrastructure is the primary deliverable and the Terraform family overlay plus `iac-scan` are required | `ea-Mitsuoka/terraform-gcp-template` |
+| A Next.js SaaS application needs the maintained Next.js family and SaaS template contract | `ea-Mitsuoka/nextjs-saas-template` |
 | Another maintained template exports a family or product contract the repository needs now | That intermediate template |
 
 Incidental use of Terraform or Google Cloud does not select `terraform-gcp-template`.
@@ -93,8 +93,9 @@ gh variable set TEMPLATE_SYNC_ENABLED --body true
 ```
 
 When the direct parent is private, keep this variable disabled until the protected
-workflow has the approved split-credential implementation and that edge has completed
-the bounded pilot in [Issue #178](https://github.com/Yukihide-Mitsuoka/ai-dev-foundation/issues/178).
+workflow has the approved split-credential implementation and that edge has completed the
+bounded pilot required by
+[ADR-0016](../adr/0016-gate-private-fleet-automation-on-split-credentials.md).
 Follow the single source of operational steps in
 [Authenticate a private direct parent](../../../.github/inheritance/README.md#authenticate-a-private-direct-parent).
 Do not make a repository public as an authentication workaround.
@@ -185,6 +186,14 @@ unknown state. Both return 2 for policy, input, or GitHub read failures.
 See [GitHub governance troubleshooting](../troubleshooting/github-governance.md) for an
 `audit` exit 1 diagnosis.
 
+Re-run `audit` whenever the repository identity changes — a transfer, a move to another
+account, or a fresh child created from the bootstrap export. Rulesets and repository
+settings are GitHub objects, not files, so they do not travel with the history. A move
+therefore lands on a repository with no branch ruleset, leaving GR-010, GR-011, and
+GR-012 without server-side enforcement while the local hooks still pass.
+`scripts/readme_ownership.py` is what detects the identity change, and its failure
+message names this command.
+
 Review `plan` before `apply`. Only `apply` changes settings; it requires local repository
 Administration access and an exact target confirmation, then verifies each action by
 read-back. Policy enforces squash-only merges and lets repository overrides choose
@@ -215,7 +224,7 @@ anytime to self-check the template (frontmatter integrity + guard-hook tests).
 ## Scenario B — clone the foundation itself onto another machine
 
 ```bash
-git clone https://github.com/Yukihide-Mitsuoka/ai-dev-foundation.git
+git clone https://github.com/ea-Mitsuoka/ai-dev-foundation.git
 cd ai-dev-foundation
 # The bare template's root Makefile is a no-op, so `make setup` does nothing here.
 # Install the git hooks directly (needs pre-commit — see prerequisites):
