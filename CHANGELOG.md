@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.1.0](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/compare/v3.0.0...v3.1.0) (2026-09-02)
+
+
+### Features
+
+* **ci:** ADR-0020 の PR 本文言語ポリシーを強制する ([b3fb635](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/commit/b3fb635d8df4a7e462ceaa72d9d973b03d98f370))
+* **ci:** enforce the ADR-0020 pull-request language policy ([56c6971](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/commit/56c6971c3f979b07f69a94b5dc8062a293c7c17d)), closes [#20](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/issues/20)
+
+
+### Bug Fixes
+
+* **infra:** cost-gate WIF の照合先を現アカウントのリポジトリ ID にする ([35c7310](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/commit/35c7310fd04e546f023e36f4d8771a81885affa9))
+* **infra:** point the cost-gate WIF condition at this account's repository id ([ae1435e](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/commit/ae1435e8bec942addffbb04104c41810b789d716)), closes [#23](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/issues/23)
+
 ## [3.0.0](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/compare/v2.11.5...v3.0.0) (2026-08-31)
 
 
