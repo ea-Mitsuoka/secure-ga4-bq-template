@@ -42,6 +42,7 @@
     "renovate.json",
     "scripts/actions/",
     "scripts/pr_language_policy.py",
+    "scripts/template_inheritance.py",
     "scripts/template_sync_auth.py",
     "docs/foundation/"
   ],
@@ -81,7 +82,6 @@
     "scripts/seed-verification-data.sh",
     "scripts/setup-github.sh",
     "scripts/template-check.sh",
-    "scripts/template_inheritance.py",
     "scripts/tests/",
     "service-packages/",
     "src/",

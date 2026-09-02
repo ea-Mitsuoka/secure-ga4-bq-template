@@ -120,16 +120,32 @@ def test_python_inheritance_tools_remain_leaf_adapted_boundaries() -> None:
         if line.strip() and not line.lstrip().startswith("#")
     }
 
-    for path in ("scripts/makefile_profile.py", "scripts/template_inheritance.py"):
-        assert path in manifest["protected_paths"]
-        assert path not in manifest["inherited_paths"]
-        assert f":!{path}" not in ignored
+    path = "scripts/makefile_profile.py"
+    assert path in manifest["protected_paths"]
+    assert path not in manifest["inherited_paths"]
+    assert f":!{path}" not in ignored
+
+
+def test_inheritance_tool_is_inherited_through_both_transports() -> None:
+    # The tool carries no leaf adaptation; it follows the direct parent so that new
+    # subcommands (bootstrap-child, adopt-child, fleet-audit) arrive with each sync.
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    ignored = {
+        line.strip()
+        for line in IGNORE.read_text(encoding="utf-8").splitlines()
+        if line.strip() and not line.lstrip().startswith("#")
+    }
+
+    for path in ("scripts/template_inheritance.py", "scripts/template_sync_auth.py"):
+        assert path in manifest["inherited_paths"]
+        assert path not in manifest["protected_paths"]
+        assert f":!{path}" in ignored
 
 
 def test_leaf_formatter_does_not_rewrite_inherited_python() -> None:
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
-    inherited_script = "scripts/template_sync_auth.py"
 
-    assert inherited_script in manifest["inherited_paths"]
-    assert inherited_script in project["tool"]["ruff"]["extend-exclude"]
+    for inherited_script in ("scripts/template_sync_auth.py", "scripts/template_inheritance.py"):
+        assert inherited_script in manifest["inherited_paths"]
+        assert inherited_script in project["tool"]["ruff"]["extend-exclude"]
