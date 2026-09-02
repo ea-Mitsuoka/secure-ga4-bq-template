@@ -33,9 +33,9 @@ updated: 2026-08-30
 
 | 現在のリポジトリの役割 | 直接の親 |
 |--------------------------|----------|
-| 適用可能な保守中の特化テンプレートがない一般プロジェクト | `Yukihide-Mitsuoka/ai-dev-foundation` |
-| Terraformで管理するGoogle Cloud基盤が主要成果物で、Terraform family overlayと`iac-scan`が必要 | `Yukihide-Mitsuoka/terraform-gcp-template` |
-| Next.js SaaS applicationに保守中のNext.js familyとSaaS template契約が必要 | `Yukihide-Mitsuoka/nextjs-saas-template` |
+| 適用可能な保守中の特化テンプレートがない一般プロジェクト | `ea-Mitsuoka/ai-dev-foundation` |
+| Terraformで管理するGoogle Cloud基盤が主要成果物で、Terraform family overlayと`iac-scan`が必要 | `ea-Mitsuoka/terraform-gcp-template` |
+| Next.js SaaS applicationに保守中のNext.js familyとSaaS template契約が必要 | `ea-Mitsuoka/nextjs-saas-template` |
 | 現在必要なfamilyまたはproduct契約を別の保守中テンプレートが公開している | その中間テンプレート |
 
 TerraformやGoogle Cloudを付随的に使うだけでは`terraform-gcp-template`を選びません。
@@ -92,8 +92,8 @@ gh variable set TEMPLATE_SYNC_ENABLED --body true
 ```
 
 直接親がprivateの場合、protected workflowへ承認済みの認証分離実装を移植し、
-[Issue #178](https://github.com/Yukihide-Mitsuoka/ai-dev-foundation/issues/178)の限定pilotがその継承関係で
-完了するまで、この変数を無効のままにしてください。設定・pilot・鍵rotation・rollbackの正準手順は
+[ADR-0016](../adr/0016-gate-private-fleet-automation-on-split-credentials.md)が要求する
+限定pilotがその継承関係で完了するまで、この変数を無効のままにしてください。設定・pilot・鍵rotation・rollbackの正準手順は
 [private直接親の認証](../../../.github/inheritance/README.md#authenticate-a-private-direct-parent)に集約します。
 認証の回避策としてrepositoryをpublicへ変更してはいけません。
 
@@ -179,6 +179,13 @@ profileとrepository policyはcheckを追加できますがfoundation checkを�
 `audit`が1で終了した場合の対処は
 [GitHubガバナンスのトラブルシューティング](../troubleshooting/github-governance.md)を参照してください。
 
+リポジトリのidentityが変わったとき — 譲渡、別アカウントへの移動、bootstrap exportからの
+新規child作成 — は必ず`audit`を再実行してください。rulesetとrepository設定はfileではなく
+GitHub上のobjectなので、historyと一緒には移動しません。移動先はbranch rulesetが存在しない
+状態になり、ローカルhookが通ったままGR-010・GR-011・GR-012のサーバ側強制が失われます。
+identity変更を検出するのは`scripts/readme_ownership.py`で、その失敗メッセージがこの
+コマンドを案内します。
+
 `apply`の前に`plan`を確認してください。設定を変更するのは`apply`だけで、ローカルの
 Administration権限と対象名の完全一致確認が必要です。各操作は再読込で検証されます。
 policyはsquash-only mergeを必須化し、Discussionsとsquash commit messageの既定値は
@@ -208,7 +215,7 @@ Claude Codeは薄い`CLAUDE.md`アダプターを自動で読みます。他の�
 ## シナリオB — 基盤リポジトリ自体を別マシンにclone
 
 ```bash
-git clone https://github.com/Yukihide-Mitsuoka/ai-dev-foundation.git
+git clone https://github.com/ea-Mitsuoka/ai-dev-foundation.git
 cd ai-dev-foundation
 # 素のテンプレートのルート Makefile は no-op なので、ここでは `make setup` は何もしません。
 # git フックを直接入れます（pre-commit が必要 — 前提ツール参照）:
