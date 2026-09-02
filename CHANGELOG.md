@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.1.1](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/compare/v3.1.0...v3.1.1) (2026-09-02)
+
+
+### Bug Fixes
+
+* **ci:** judge PR size against the current pull-request body ([bc66b5f](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/commit/bc66b5f3cf038b0504b10bc76eca91d71ac28ea4))
+* **ci:** judge PR size against the current pull-request body ([7bf1886](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/commit/7bf1886591c91fbb725fa605a21f9ee5e0fa86eb))
+
 ## [3.1.0](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/compare/v3.0.0...v3.1.0) (2026-09-02)
 
 
