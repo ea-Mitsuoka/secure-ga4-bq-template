@@ -93,6 +93,16 @@ jobs:
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
+      - name: Resolve the current pull-request body
+        # The event payload freezes the body at creation. Template Sync records the
+        # direct-parent provenance seconds later, so a policy that reads the payload
+        # judges a body the pull request no longer has.
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}" --jq '.body // ""' \
+            > "${RUNNER_TEMP}/pr-body.md"
       - name: PR size guard (GR-020)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -105,8 +115,8 @@ jobs:
           TARGET_REPOSITORY: ${{ github.repository }}
           HEAD_REF: ${{ github.event.pull_request.head.ref }}
           BASE_REF: ${{ github.event.pull_request.base.ref }}
-          PR_BODY: ${{ github.event.pull_request.body }}
         run: |
+          PR_BODY="$(cat "${RUNNER_TEMP}/pr-body.md")"
           gh api --paginate --slurp \
             "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/files?per_page=100" \
             > "${RUNNER_TEMP}/pr-files.json"
@@ -122,13 +132,11 @@ jobs:
             --base-ref "${BASE_REF}" \
             --pr-body "${PR_BODY}"
       - name: PR body language (ADR-0020)
-        # The body travels through the environment, never through shell interpolation.
+        # The body comes from the resolved file; nothing travels through shell interpolation.
         env:
-          PR_BODY: ${{ github.event.pull_request.body }}
           PR_AUTHOR: ${{ github.event.pull_request.user.login }}
           PR_LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
         run: |
-          printf '%s' "${PR_BODY}" > "${RUNNER_TEMP}/pr-body.md"
           printf '%s' "${PR_LABELS}" > "${RUNNER_TEMP}/pr-labels.json"
           python3 scripts/pr_language_policy.py \
             --body-file "${RUNNER_TEMP}/pr-body.md" \
