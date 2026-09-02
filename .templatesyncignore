@@ -10,6 +10,8 @@ scripts/**
 :!scripts/actions/
 :!scripts/actions/**
 :!scripts/pr_language_policy.py
+:!scripts/template_inheritance.py
+:!scripts/template_sync_auth.py
 service-packages/**
 CLAUDE.md
 README.md
