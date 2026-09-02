@@ -19,7 +19,7 @@ class PullRequestSizePolicyTests(unittest.TestCase):
         # The body is resolved from the API, not read from the frozen event payload:
         # Template Sync rewrites it with the provenance line after the pull request opens.
         self.assertNotIn("PR_BODY: ${{ github.event.pull_request.body }}", workflow)
-        self.assertIn('--jq \'.body // ""\'', workflow)
+        self.assertIn("--jq '.body // \"\"'", workflow)
         self.assertIn('PR_BODY="$(cat "${RUNNER_TEMP}/pr-body.md")"', workflow)
 
     def test_excludes_lockfile_churn_from_hard_limit(self) -> None:
