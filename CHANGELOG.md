@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.1.2](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/compare/v3.1.1...v3.1.2) (2026-09-23)
+
+
+### Bug Fixes
+
+* **deps:** bump anyio to clear CVE-2026-63374 and CVE-2026-63349 ([08e6d59](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/commit/08e6d59e567017923ded4add84fa0cdde50e83f5))
+* **deps:** bump anyio to clear CVE-2026-63374 and CVE-2026-63349 ([9c52c7d](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/commit/9c52c7d1959e3f6d9a5d706d9218d35dc9e0f109))
+
 ## [3.1.1](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/compare/v3.1.0...v3.1.1) (2026-09-02)
 
 
