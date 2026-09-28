@@ -72,6 +72,7 @@
     "CLAUDE.md",
     "Makefile",
     "README.md",
+    "Taskfile.yml",
     "infra/",
     "profiles/README.md",
     "profiles/python-uv/",
