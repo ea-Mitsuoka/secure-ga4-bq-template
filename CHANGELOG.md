@@ -1,5 +1,26 @@
 # Changelog
 
+## [4.0.0](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/compare/v3.1.2...v4.0.0) (2026-10-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* make <target> no longer works at the repository root; run task <target>.
+
+### Features
+
+* **profiles:** convert the dbt and Dataform rail profiles to Taskfiles (ADR-0026) ([1e16f87](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/commit/1e16f87a9291cf6ee095c8acfb85f34262b3a1b4))
+* **profiles:** convert the dbt and Dataform rail profiles to Taskfiles (ADR-0026) ([a77702d](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/commit/a77702d551083bd6a6d56bd2ef49a72fee4623b2))
+* **profiles:** convert the Python, Node, and Terraform profiles to Taskfiles (ADR-0026) ([af7b88a](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/commit/af7b88a23a21785199b2bf8759d27119aa20633d))
+* **profiles:** convert the Python, Node, and Terraform profiles to Taskfiles (ADR-0026) ([be58861](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/commit/be58861dd49de90f8461d4f37c64d5cc3c24f6bd))
+* replace the Makefile with a Taskfile (ADR-0026) ([1864f5e](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/commit/1864f5e7220a647a936be77539e4221c1f12d5cc))
+
+
+### Bug Fixes
+
+* **deps:** update urllib3 to 2.8.0 ([35914da](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/commit/35914da0d47734d0ed4e61526d49a974d6416b09))
+* **deps:** update urllib3 to 2.8.0 ([283bc53](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/commit/283bc5363d00fa162d862baf645bb747de398a66))
+
 ## [3.1.2](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/compare/v3.1.1...v3.1.2) (2026-09-23)
 
 
