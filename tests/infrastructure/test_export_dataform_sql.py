@@ -103,10 +103,10 @@ def test_dataform_toolchain_and_security_override_are_lockfile_pinned() -> None:
 
 def test_dataform_profile_uses_lockfile_mode_and_exports_cost_gate_sql() -> None:
     settings = (SKELETON / "workflow_settings.yaml").read_text(encoding="utf-8")
-    makefile = (PROFILE / "Makefile").read_text(encoding="utf-8")
+    taskfile = (PROFILE / "Taskfile.yml").read_text(encoding="utf-8")
 
     assert "dataformCoreVersion:" not in settings
-    assert "compile-cost-gate:" in makefile
-    assert "npm ci --ignore-scripts" in makefile
-    assert "npx --no-install dataform compile --json" in makefile
-    assert "scripts/export_dataform_sql.py" in makefile
+    assert "compile-cost-gate:" in taskfile
+    assert "npm ci --ignore-scripts" in taskfile
+    assert "npx --no-install dataform compile --json" in taskfile
+    assert "scripts/export_dataform_sql.py" in taskfile

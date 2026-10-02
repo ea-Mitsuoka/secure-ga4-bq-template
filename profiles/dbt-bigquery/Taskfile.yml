@@ -1,0 +1,162 @@
+# Profile: Terraform (infra/envs) + dbt/BigQuery (transform/). Superset of the root
+# terraform tasks — canonical tasks keep their semantics, dbt is added where it belongs
+# (lint=SQLFluff check-only, build=+dbt parse, credentialed runs as extensions).
+# Reference implementation of the canonical task contract
+# (.ai/contracts/foundation/task-targets.md); copy to the repository root as Taskfile.yml.
+version: "3"
+
+vars:
+  FILE: '{{.FILE | default ""}}'
+  ENV: '{{.ENV | default "dev"}}'
+  TRANSFORM_DIR: '{{.TRANSFORM_DIR | default "transform"}}'
+  DBT: 'cd "{{.TRANSFORM_DIR}}" && DBT_PROFILES_DIR=. dbt'
+
+tasks:
+  default:
+    desc: List available tasks
+    silent: true
+    cmds:
+      - task --list
+
+  setup:
+    desc: Install git hooks (terraform/tflint/dbt/sqlfluff come from your machine setup)
+    silent: true
+    cmds:
+      - |
+        if command -v pre-commit >/dev/null 2>&1; then pre-commit install --hook-type pre-commit --hook-type pre-push; else echo "pre-commit not installed — local hooks skipped (CI runs the same gates)"; fi
+      - |
+        if command -v dbt >/dev/null 2>&1; then {{.DBT}} deps; else echo "dbt not installed — transform targets unavailable"; fi
+
+  format:
+    desc: Auto-format terraform + SQL (all, or FILE=<path>)
+    cmds:
+      - cmd: terraform fmt -recursive infra
+        if: '[ -z "{{.FILE}}" ]'
+      - cmd: |
+          if command -v sqlfluff >/dev/null 2>&1; then sqlfluff fix --force "{{.TRANSFORM_DIR}}/models"; else echo "sqlfluff not installed — SQL left as-is"; fi
+        if: '[ -z "{{.FILE}}" ]'
+        silent: true
+      - cmd: terraform fmt "{{.FILE}}"
+        if: '{{if or (hasSuffix ".tf" .FILE) (hasSuffix ".tfvars" .FILE)}}true{{else}}false{{end}}'
+      - cmd: sqlfluff fix --force "{{.FILE}}"
+        if: '{{if hasSuffix ".sql" .FILE}}true{{else}}false{{end}}'
+
+  lint:
+    desc: Check-only, zero warnings (COD-001); never fixes
+    cmds:
+      - terraform fmt -check -recursive infra
+      - cmd: |
+          if command -v tflint >/dev/null 2>&1; then tflint --recursive --chdir infra; else echo "tflint not installed — CI still enforces it"; fi
+        silent: true
+      - cmd: |
+          if command -v sqlfluff >/dev/null 2>&1; then sqlfluff lint "{{.TRANSFORM_DIR}}/models"; else echo "sqlfluff not installed — CI still enforces it"; fi
+        silent: true
+
+  test:
+    desc: Full suite
+    cmds:
+      - task: test-integration
+
+  test-unit:
+    desc: "Fast gate for pre-push: fmt + SQL lint (no warehouse)"
+    cmds:
+      - terraform fmt -check -recursive infra
+      - cmd: |
+          if command -v sqlfluff >/dev/null 2>&1; then sqlfluff lint "{{.TRANSFORM_DIR}}/models"; fi
+        silent: true
+
+  test-integration:
+    desc: terraform test dirs + dbt data tests (dbt part needs credentials)
+    vars:
+      TEST_DIRS:
+        sh: find infra -name '*.tftest.hcl' -exec dirname {} \; | sort -u
+    cmds:
+      - for: { var: TEST_DIRS }
+        cmd: echo "Testing {{.ITEM}}..." && cd "{{.ITEM}}" && terraform init -backend=false -input=false >/dev/null && terraform test
+      - cmd: |
+          if command -v dbt >/dev/null 2>&1 && [ -f "{{.TRANSFORM_DIR}}/profiles.yml" ]; then {{.DBT}} test; else echo "dbt or profiles.yml missing — dbt tests skipped (need warehouse credentials)"; fi
+        silent: true
+
+  coverage:
+    desc: dbt has no line coverage; the honest metric is documented+tested models
+    silent: true
+    cmds:
+      - 'echo "coverage: no line-coverage concept for IaC/SQL; dbt test results above are the gate"'
+
+  build:
+    desc: "Credential-free gates: terraform validate every env + dbt parse"
+    vars:
+      ENV_DIRS:
+        sh: find infra/envs -mindepth 1 -maxdepth 1 -type d | sort
+    cmds:
+      - for: { var: ENV_DIRS }
+        cmd: echo "Validating {{.ITEM}}..." && cd "{{.ITEM}}" && terraform init -backend=false -input=false >/dev/null && terraform validate
+      - cmd: |
+          if command -v dbt >/dev/null 2>&1; then {{.DBT}} parse; else echo "dbt not installed — parse gate skipped (CI still enforces it)"; fi
+        silent: true
+
+  run:
+    desc: For IaC, "run" shows the plan; transform runs are `task dbt-run`
+    cmds:
+      - task: plan
+
+  plan:
+    desc: Plan the selected env (ENV=dev by default; needs credentials + backend)
+    dir: infra/envs/{{.ENV}}
+    cmds:
+      - terraform init -input=false
+      - terraform plan
+
+  security-scan:
+    desc: "Local sweep: secrets + IaC misconfig"
+    silent: true
+    cmds:
+      - |
+        if command -v gitleaks >/dev/null 2>&1; then gitleaks detect --no-banner; else echo "gitleaks not installed — CI still enforces SEC-002"; fi
+      - |
+        if command -v trivy >/dev/null 2>&1; then trivy config --exit-code 1 infra; else echo "trivy not installed — CI still enforces SEC-030"; fi
+
+  sbom:
+    desc: SBOM (SPDX + CycloneDX) into dist/ — REL-020
+    silent: true
+    cmds:
+      - mkdir -p dist
+      - |
+        if command -v syft >/dev/null 2>&1; then syft . -o spdx-json=dist/sbom.spdx.json -o cyclonedx-json=dist/sbom.cdx.json && echo "SBOM written to dist/"; else echo "syft not installed — release workflow generates the authoritative SBOM"; fi
+
+  clean:
+    desc: Remove caches/artifacts inside the workspace only (GR-031)
+    cmds:
+      - find infra -type d -name ".terraform" -exec rm -rf {} + 2>/dev/null || true
+      - rm -rf "{{.TRANSFORM_DIR}}/target" "{{.TRANSFORM_DIR}}/dbt_packages" dist
+
+  doctor:
+    desc: "Foundation self-check: metadata invariants + guard-hook tests"
+    silent: true
+    cmds:
+      - bash scripts/template-check.sh
+      - bash .claude/hooks/tests/guard-bash.test.sh
+
+  # ---------------------------------------------------------------------------
+  # Project extensions — dbt workflow (need warehouse credentials)
+  # ---------------------------------------------------------------------------
+
+  dbt-deps:
+    desc: Install dbt packages
+    cmds:
+      - '{{.DBT}} deps'
+
+  dbt-run:
+    desc: Build models against the target warehouse
+    cmds:
+      - '{{.DBT}} run'
+
+  dbt-test:
+    desc: Run dbt data tests
+    cmds:
+      - '{{.DBT}} test'
+
+  dbt-build:
+    desc: run + test in DAG order
+    cmds:
+      - '{{.DBT}} build'
