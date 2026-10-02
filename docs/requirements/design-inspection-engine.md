@@ -17,8 +17,8 @@ updated: 2026-07-28
   チェックを含めている（§11）。
 - 基準実装の状態: **v1.0実装済み**（2026-07-12）。§8のPR
   #13/#14/#15/#19/#22/#23/#24/#25/#26/#27/#28で、11チェックとregistry、収集アダプター、
-  YAML設定、ユースケース、`make inspect` CLI、JSON・Markdownレポートをmainへ導入した。
-  CLIはconsole scriptではなく`make inspect` / `python -m`として提供する。非パッケージ型リポジトリ
+  YAML設定、ユースケース、`task inspect` CLI、JSON・Markdownレポートをmainへ導入した。
+  CLIはconsole scriptではなく`task inspect` / `python -m`として提供する。非パッケージ型リポジトリ
   ではmakeが正準エントリーポイントである。実環境証跡は
   [Acceptance B証跡](../verification/2026-07-12-inspection-engine-b-evidence.md)と
   [技術的Acceptance A証跡](../verification/2026-07-15-public-ga4-acceptance-a-evidence.md)に記録済み。
@@ -241,7 +241,7 @@ INFO findingとして報告する。
 正準エントリーポイントは次のとおりである。
 
 ```bash
-make inspect PARAMS=inspection-params.yml OUT=reports
+task inspect PARAMS=inspection-params.yml OUT=reports
 ```
 
 同じCLIを直接呼び出す場合は、次の契約に従う。
@@ -260,12 +260,12 @@ uv run python -m src.modules.inspection.interface.cli \
 ## 7. ツールチェーン統合
 
 - ルートの`pyproject.toml`は **uv**（python-uv profile）で管理し、依存関係はADR-0003に従う。
-- ルートMakefileは既存のTerraform targetとpython-uv targetを統合する。`format`はterraform fmtと
+- ルートTaskfileは既存のTerraform targetとpython-uv targetを統合する。`format`はterraform fmtと
   ruff format、`lint`はterraform fmt-check・tflint・ruff check・mypy、`test-unit`はpytest unit
   tierとterraform fmt-check、`test-integration`はterraform testとpytest integration tier、
   `coverage`はpytest --covによるratchet（TST-003）を実行する。`profiles/README.md`の契約上の
   意味は変更しない。
-- 拡張targetとして`make inspect PARAMS=<file>`を提供する。
+- 拡張targetとして`task inspect PARAMS=<file>`を提供する。
 
 ## 8. デリバリー計画（GR-020に収まる分割）
 

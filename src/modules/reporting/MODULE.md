@@ -12,12 +12,12 @@ and [ADR-0005](../../../docs/adr/0005-render-remediation-drafts-from-recipes.md)
 ## Public API
 
 | Entry point | Layer | Description |
-|-------------|-------|-------------|
+| -- | -- | -- |
 | `InspectionArtifact`, `GeneratedNarrative`, `ReportLanguage` | domain | Validated CHK-01..CHK-13 input, fixed `en` / `ja` language, and provider-output vocabulary |
 | `GenerateAiReport.handle(input_path, out_dir, language=en)` | application | Read, pseudonymize, generate in the fixed language, validate, and write |
 | `GenerateRemediationDraft.handle(input_path, out_dir)` | application | Read, select versioned recipes, and write a deterministic draft |
-| `make report-ai FINDINGS=<json> REPORT_LANGUAGE=en|ja` | interface | Opt-in Vertex AI CLI; writes localized `ai-report.md` with English as the default |
-| `make remediation-draft FINDINGS=<json>` | interface | Offline deterministic CLI; writes `remediation-draft.md` |
+| \`task report-ai FINDINGS=<json> REPORT_LANGUAGE=en | ja\` | interface |
+| `task remediation-draft FINDINGS=<json>` | interface | Offline deterministic CLI; writes `remediation-draft.md` |
 | `examples/reporting/` | example | Public synthetic report pack for offline review; never Acceptance evidence |
 
 ## Owned data
@@ -52,7 +52,7 @@ directory.
 ## Dependencies
 
 | Uses | Via | Why |
-|------|-----|-----|
+| -- | -- | -- |
 | Inspection module | serialized `findings.json` contract only | Preserve bounded-context isolation |
 | Vertex AI | `TextGenerator` application port | Replaceable provider adapter |
 

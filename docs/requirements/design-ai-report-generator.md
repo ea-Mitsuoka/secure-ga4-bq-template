@@ -10,9 +10,9 @@ updated: 2026-07-28
 - 状態: スライス1〜7を実装済み。スライス5の実環境証跡は
   [Vertex AI実環境証跡](../verification/2026-07-12-ai-report-live-evidence.md)を参照。
 - 言語拡張の状態: Issue #253で実装済み。`REPORT_LANGUAGE=en|ja`を利用できる。
-- 公開エントリーポイント: `make report-ai FINDINGS=<findings.json> [OUT=<directory>]
+- 公開エントリーポイント: `task report-ai FINDINGS=<findings.json> [OUT=<directory>]
   [REPORT_LANGUAGE=en|ja]`と
-  `make remediation-draft FINDINGS=<findings.json> [OUT=<directory>]`。
+  `task remediation-draft FINDINGS=<findings.json> [OUT=<directory>]`。
 - 要件: `requirements-secure-asset.md`のFR-5、§4.2、§7.1、§8のAcceptance A。
 - アーキテクチャゲート: [ADR-0004](../adr/0004-isolate-ai-report-generation.md)と
   [ADR-0005](../adr/0005-render-remediation-drafts-from-recipes.md)。
@@ -185,7 +185,7 @@ Geminiを利用する。制限付きタイムアウトとJSONレスポンスス�
 | ローカル描画 | 英語の見出し・注意書き・metadata label | 日本語の見出し・注意書き・metadata label |
 | 決定論finding | ID、重大度、resource、rule、是正ヒントを原文のまま保持 | 同左 |
 
-- Makefileは`REPORT_LANGUAGE`をCLIの`--language`へ渡す。
+- Taskfileは`REPORT_LANGUAGE`をCLIの`--language`へ渡す。
 - 未指定時は`en`を使い、既存利用者の呼び出しを維持する。
 - CLIは許可値以外をprovider呼び出し前に終了コード2で拒否する。
 - 言語指定は、findingの追加・削除・並べ替え・重大度変更を許可しない。

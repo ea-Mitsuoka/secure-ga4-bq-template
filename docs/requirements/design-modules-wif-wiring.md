@@ -104,7 +104,7 @@ updated: 2026-07-14
 ## C. gcp-cicd-workflows に追加する新規ワークフロー（house style）
 - `bq-cost-gate.yml`: `workflow_call`＋WIF＋`setup-gcloud`。入力=SQL glob・`max_bytes`。`bq query --dry-run --format=json` の `totalBytesProcessed` が予算超で fail。PRコメントは `tf-plan.yml` のgithub-scriptパターン流用。
 - `bq-inspect.yml`: `workflow_call`＋WIF＋`setup-gcloud`。`service_account` にinspector SAを受ける。点検スクリプト実行→レポート/是正ドラフト生成（ローカルCLIと同一ロジック）。`permissions: contents:read, id-token:write`。
-- SQL lint（SQLFluff/`dataform format`）は foundation の `make lint` 側（cloud認証不要なため gcp-cicd-workflows には置かない原則）。
+- SQL lint（SQLFluff/`dataform format`）は foundation の `task lint` 側（cloud認証不要なため gcp-cicd-workflows には置かない原則）。
 
 ---
 

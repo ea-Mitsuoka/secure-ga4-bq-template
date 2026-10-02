@@ -20,17 +20,17 @@ Architecture decision: [ADR-0003](../../../docs/adr/0003-inspection-engine-pytho
 ## Public API (the contract — everything else in this module is private)
 
 | Entry point | Layer | Description |
-|-------------|-------|-------------|
+| -- | -- | -- |
 | `Finding`, `Severity`, `sorted_findings` | domain | Output vocabulary every consumer reads |
 | `Report`, `Coverage` | domain | The complete output frame: findings + §4.2 coverage + params echo |
 | `SensitivityCatalog`, `PromotedColumn`, `PromotionSource` | domain | Versioned sensitivity and declared promotion-origin vocabulary; source values remain vendor-neutral and do not prove SQL lineage |
 | `RunInspection.handle(params) -> Report` | application | snapshot → 13 checks → sorted report; Acceptance B remains CHK-01..CHK-11 |
-| `make inspect PARAMS=<yaml>` (`python -m src.modules.inspection.interface.cli`) | interface | engagement params in, `findings.json` + `findings.csv` + `summary.md` out; `--fail-on` gates CI |
+| `task inspect PARAMS=<yaml>` (`python -m src.modules.inspection.interface.cli`) | interface | engagement params in, `findings.json` + `findings.csv` + `summary.md` out; `--fail-on` gates CI |
 
 ## Events
 
 | Direction | Event | Schema | Notes |
-|-----------|-------|--------|-------|
+| -- | -- | -- | -- |
 | — | — | — | none; the engine is a batch read-evaluate-report pipeline |
 
 ## Owned data
@@ -67,7 +67,7 @@ flat finding-list projection. The module never mutates any GCP resource.
 ## Dependencies
 
 | Uses module | Via | Why |
-|-------------|-----|-----|
+| -- | -- | -- |
 | — | — | none; `catalog/ga4-sensitivity.yml` is consumed as data via a repository port |
 
 ## Layout
@@ -76,8 +76,8 @@ flat finding-list projection. The module never mutates any GCP resource.
 domain/                 # finding/snapshot/params/catalog/report models + checks/ (13 pure checkpoints)
 application/            # ports.py + collect_snapshot.py + run_inspection.py
 infrastructure/         # gcp/ adapters, YAML repos, JSON/CSV/Markdown writers, system clock
-interface/cli.py        # argparse CLI (make inspect)
+interface/cli.py        # argparse CLI (task inspect)
 ```
 
 Tests mirror this at `tests/modules/inspection/` (unit tier + a live-flagged
-integration smoke test gated on `INSPECT_LIVE_PROJECT`). Run: `make test-unit`.
+integration smoke test gated on `INSPECT_LIVE_PROJECT`). Run: `task test-unit`.
