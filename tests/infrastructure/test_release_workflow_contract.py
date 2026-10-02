@@ -14,6 +14,7 @@ ATTEST_ACTION = "actions/attest-build-provenance@0f67c3f4856b2e3261c31976d672578
 CHECKOUT_ACTION = "actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0"
 TERRAFORM_SETUP_ACTION = "hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd"
 UV_SETUP_ACTION = "astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e"
+TASK_SETUP_ACTION = "./scripts/actions/setup-task"
 
 
 def _workflow() -> dict[str, Any]:
@@ -87,7 +88,7 @@ def test_release_gate_generates_both_required_sbom_formats() -> None:
         "dist/sbom.cdx.json",
     ]
     assert {TRIVY_ACTION, ATTEST_ACTION}.issubset(action_refs)
-    assert {"make test", "make sbom", "make build"}.issubset(run_steps)
+    assert {"task test", "task sbom", "task build"}.issubset(run_steps)
 
 
 def test_release_gate_explicitly_attaches_sboms_only_to_created_release() -> None:
@@ -132,17 +133,19 @@ def test_manual_dispatch_preflights_release_gates_without_a_tag() -> None:
     )
 
 
-def test_release_gate_provisions_toolchains_before_make_setup() -> None:
+def test_release_gate_provisions_toolchains_before_task_setup() -> None:
     steps = _workflow()["jobs"]["release-gates"]["steps"]
     action_refs = [step.get("uses") for step in steps]
-    make_setup_index = next(
-        index for index, step in enumerate(steps) if step.get("run") == "make setup"
+    task_setup_index = next(
+        index for index, step in enumerate(steps) if step.get("run") == "task setup"
     )
 
     assert TERRAFORM_SETUP_ACTION in action_refs
     assert UV_SETUP_ACTION in action_refs
-    assert action_refs.index(TERRAFORM_SETUP_ACTION) < make_setup_index
-    assert action_refs.index(UV_SETUP_ACTION) < make_setup_index
+    assert TASK_SETUP_ACTION in action_refs
+    assert action_refs.index(TERRAFORM_SETUP_ACTION) < task_setup_index
+    assert action_refs.index(UV_SETUP_ACTION) < task_setup_index
+    assert action_refs.index(TASK_SETUP_ACTION) < task_setup_index
 
     terraform_step = steps[action_refs.index(TERRAFORM_SETUP_ACTION)]
     assert terraform_step["with"]["terraform_wrapper"] == "false"

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Template self-check ("make doctor"): fast, dependency-free validation that the
+# Template self-check ("task doctor"): fast, dependency-free validation that the
 # foundation's own metadata invariants hold. Automates what a manual/agent audit would
 # otherwise catch. Exits non-zero on any violation. Add checks here as invariants grow.
 #
@@ -12,7 +12,8 @@
 #   4. Child repositories with a manifest satisfy the local inheritance and legacy
 #      Template Sync protection contract.
 #   5. Declared AI context routes remain structurally valid and report measured budgets.
-#   6. Required Make targets have repository-owned implementations.
+#   6. Required canonical targets (Taskfile.yml, or the Makefile before ADR-0026's
+#      migration) have repository-owned implementations.
 #   7. Root README ownership is valid when marked; legacy missing markers remain warnings.
 
 set -u
@@ -58,9 +59,16 @@ fi
 python3 scripts/context_budget.py validate --root . || \
   err "AI context routes or budgets are invalid (ADR-0012)"
 
-# 6. Required canonical Make targets must not retain Foundation template placeholders.
-python3 scripts/makefile_profile.py --root . || \
-  err "Required Make targets retain unresolved template placeholders"
+# 6. Required canonical targets must not retain Foundation template placeholders.
+# ADR-0026: a root Taskfile.yml is validated by taskfile_profile.py; without one the
+# repository keeps the Makefile check until the foundation's contract phase.
+if [ -f Taskfile.yml ]; then
+  python3 scripts/taskfile_profile.py --root . || \
+    err "Required canonical targets retain unresolved template placeholders"
+else
+  python3 scripts/makefile_profile.py --root . || \
+    err "Required canonical targets retain unresolved template placeholders"
+fi
 
 # 7. ADR-0011: detect ownership mismatches without moving or rewriting files. Existing
 # repositories without a marker receive a warning so rule propagation does not force a
