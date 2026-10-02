@@ -5,8 +5,8 @@ copy, per the rail's profile-copy decision — no generator, no meta-compiler.
 
 ## Activation
 
-1. Copy [Makefile](Makefile) to the repo root (replaces the terraform-only one; all
-   terraform targets are preserved, dbt targets are added).
+1. Copy [Taskfile.yml](Taskfile.yml) to the repo root (replaces the root one; all
+   terraform tasks are preserved, dbt tasks are added).
 2. `cp -r profiles/dbt-bigquery/skeleton transform`
 3. `cd transform && cp profiles.yml.example profiles.yml` — adjust project/location.
    Local dev authenticates via `gcloud auth application-default login` (oauth method;
@@ -14,12 +14,12 @@ copy, per the rail's profile-copy decision — no generator, no meta-compiler.
 4. Wire the Terraform outputs into dbt vars (`transform/dbt_project.yml`):
    `terraform -chdir=infra/envs/dev output -json policy_tag_ids` → `policy_tag_high` etc.;
    set `ga4_export_project` / `ga4_export_dataset` to the Google-created export.
-5. `make build` — credential-free gate (terraform validate + `dbt parse`).
+5. `task build` — credential-free gate (terraform validate + `dbt parse`).
 
 ## Where protection applies (deliberate, not an omission)
 
 | Layer | Materialization | Protection |
-|-------|-----------------|-----------|
+| -- | -- | -- |
 | staging / intermediate | view | **dataset IAM only** — BigQuery does not support policy tags on view columns |
 | marts | table | dataset IAM **+ column policy tags** declared in `_marts__models.yml` |
 
@@ -40,6 +40,6 @@ the deployer/transformer SA — see design-modules-wif-wiring.md.
   marts can tag them; promoted keys are an engagement parameter.
 - Tests are partition-aware (a `where` window) so `require_partition_filter` tables stay
   testable.
-- SQL lint: SQLFluff via `make lint` (cloud-auth-free, so it lives here, not in
+- SQL lint: SQLFluff via `task lint` (cloud-auth-free, so it lives here, not in
   gcp-cicd-workflows). The CI dry-run cost gate (`bq-cost-gate.yml`) is a separate,
   engine-independent workflow — planned in gcp-cicd-workflows.

@@ -1,4 +1,4 @@
-# Copy to profiles.yml (same directory; Makefile sets DBT_PROFILES_DIR=.).
+# Copy to profiles.yml (same directory; Taskfile sets DBT_PROFILES_DIR=.).
 # oauth = Application Default Credentials: `gcloud auth application-default login`
 # locally, WIF-minted credentials on CI. No keyfiles ever (GR-001).
 ga4_secure_marts:

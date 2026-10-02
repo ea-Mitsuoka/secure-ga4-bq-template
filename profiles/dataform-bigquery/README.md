@@ -7,8 +7,8 @@ table); pick ONE engine per repository (rail constraint).
 
 ## Activation
 
-1. Copy [Makefile](Makefile) to the repo root (replaces the terraform-only one; all
-   terraform targets are preserved, Dataform targets are added). Requires Node.js
+1. Copy [Taskfile.yml](Taskfile.yml) to the repo root (replaces the root one; all
+   terraform tasks are preserved, Dataform tasks are added). Requires Node.js
    20-24 and npm; Dataform CLI/Core versions come only from the checked-in lockfile.
 2. `cp -r profiles/dataform-bigquery/skeleton transform`
 3. Edit `transform/workflow_settings.yaml`: set `defaultProject` / `defaultLocation`
@@ -19,15 +19,17 @@ table); pick ONE engine per repository (rail constraint).
 5. Credentials for `dataform run/test`: `cd transform && dataform init-creds` and pick
    **application-default-credentials**. Never create a JSON key file (GR-001);
    `.df-credentials.json` is gitignored either way.
-6. `make setup && make build` — lockfile install plus credential-free validation.
+6. `task setup && task build` — lockfile install plus credential-free validation.
 
 ## Cost-gate compilation
 
-The profile provides `make compile-cost-gate`. It runs `npm ci --ignore-scripts`,
+The profile provides `task compile-cost-gate`. It runs `npm ci --ignore-scripts`,
 compiles the Dataform graph without ADC, and exports table, assertion, and operation
 queries as regular SQL under `transform/target/compiled/`. Configure the caller with:
 
-- `BQ_COST_GATE_COMPILE_COMMAND=make compile-cost-gate`
+- `BQ_COST_GATE_COMPILE_COMMAND=bash scripts/actions/setup-task/install.sh "$RUNNER_TEMP/task-bin" && "$RUNNER_TEMP/task-bin/task" compile-cost-gate`. The reusable workflow's compile job does not ship go-task, so the
+  command installs the pinned release (checksum-verified, ADR-0026) before running the
+  task.
 - `BQ_COST_GATE_SQL_GLOB=transform/target/compiled/**/*.sql`
 
 Compilation errors, empty queries, duplicate output paths, and unmarked output
@@ -49,7 +51,7 @@ and Dataform `defaultLocation` MUST also use `US`.
 3. Keep `cost_gate_source_datasets` empty for this source. That input creates IAM
    bindings and is only for private datasets whose IAM the caller is allowed to manage;
    the public sample remains Google-managed.
-4. Run `make compile-cost-gate`. This installs only lockfile-pinned tooling, needs no
+4. Run `task compile-cost-gate`. This installs only lockfile-pinned tooling, needs no
    ADC, and emits regular SQL for a no-charge BigQuery dry run.
 5. Replace the example policy-tag paths with Terraform output only before a credentialed
    Dataform run. Delete every temporary managed resource after live verification.
@@ -78,7 +80,7 @@ proof, but it is not evidence of applying the asset to a real customer engagemen
 ## Where protection applies (deliberate, not an omission)
 
 | Layer | Materialization | Protection |
-|-------|-----------------|-----------|
+| -- | -- | -- |
 | staging / intermediate | view | **dataset IAM only** — BigQuery does not support policy tags on view columns |
 | marts | table | dataset IAM **+ column policy tags** via `bigqueryPolicyTags` in the sqlx config |
 
@@ -104,7 +106,7 @@ the deployer/transformer SA — see design-modules-wif-wiring.md.
   failure marker so unrelated policy-tagged columns do not require fine-grained reader
   access. Assertions materialize into the IAM-locked `staging` dataset
   (`defaultAssertionDataset`), not an unmanaged one.
-- Lint: `dataform format` has no check-only mode, so `make lint` enforces the rail
+- Lint: `dataform format` has no check-only mode, so `task lint` enforces the rail
   naming conventions (`stg_*`/`int_*`/`fct_*`/`dim_*`) instead; formatting remains
-  `make format`'s job. The CI dry-run cost gate uses the separate, engine-independent
+  `task format`'s job. The CI dry-run cost gate uses the separate, engine-independent
   `gcp-cicd-workflows` v2 workflow.
