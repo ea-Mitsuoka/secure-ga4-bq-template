@@ -26,13 +26,13 @@ case-insensitive CHK-05 location comparisons.
 
 **Cause:** Vertex AI routing configuration is incomplete.
 
-**Fix:** Set both variables shown in `.env.example`, then rerun `make report-ai`.
+**Fix:** Set both variables shown in `.env.example`, then rerun `task report-ai`.
 
 ## ga4-bq-report: invalid input or output: inspection coverage is incomplete
 
 **Cause:** One or more resources were skipped during deterministic inspection.
 
-**Fix:** Resolve the skipped-resource cause and rerun `make inspect`. AI reporting does
+**Fix:** Resolve the skipped-resource cause and rerun `task inspect`. AI reporting does
 not describe a partial inspection as complete.
 
 ## ga4-bq-report: generation failed: Vertex AI report generation failed

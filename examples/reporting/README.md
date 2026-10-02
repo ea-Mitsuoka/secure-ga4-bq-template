@@ -11,7 +11,7 @@ updated: 2026-07-28
 ありません。
 
 | ファイル | 確認できること |
-|----------|----------------|
+| -- | -- |
 | [`findings.json`](findings.json) | 正準の機械可読結果、実行条件、カバレッジ、finding |
 | [`findings.csv`](findings.csv) | 表計算ソフト向けfinding投影 |
 | [`summary.md`](summary.md) | 重大度とcheckpoint別の決定論的要約 |
@@ -19,5 +19,5 @@ updated: 2026-07-28
 | [`remediation-draft.md`](remediation-draft.md) | 自動適用しない是正レシピとplaceholder |
 
 サンプルは、列のPolicy Tag不足（CHK-04）、description不足（CHK-12）、昇格元宣言不足
-（CHK-13）を示します。実案件では`make inspect`が生成した`findings.json`と`summary.md`が正準です。
+（CHK-13）を示します。実案件では`task inspect`が生成した`findings.json`と`summary.md`が正準です。
 AI説明文と是正ドラフトは人が確認する草案であり、合格判定や自動変更には使いません。

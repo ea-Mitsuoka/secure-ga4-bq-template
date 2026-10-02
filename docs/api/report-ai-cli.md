@@ -13,7 +13,7 @@ updated: 2026-07-28
 ## AIレポートコマンド
 
 ```bash
-make report-ai \
+task report-ai \
   FINDINGS=reports/project/timestamp/findings.json \
   REPORT_LANGUAGE=ja
 ```
@@ -25,7 +25,7 @@ make report-ai \
 ### パラメータ
 
 | パラメータ | 必須 | 既定値 | 意味 |
-|------------|------|--------|------|
+| -- | -- | -- | -- |
 | `FINDINGS` | はい | `findings.json` | 点検成果物のパス |
 | `OUT` | いいえ | 入力ファイルのディレクトリ | 出力先 |
 | `REPORT_LANGUAGE` | いいえ | `en` | `en`または`ja`。AI生成文と固定見出しの言語 |
@@ -44,7 +44,7 @@ make report-ai \
 - 言語によらずfinding ID、重大度、resource、rule、決定論的な是正ヒントを変更しない。
 
 | 終了コード | 意味 | 呼び出し側の対応 |
-|------------|------|------------------|
+| -- | -- | -- |
 | 0 | レポートを書き込んだ | `summary.md`と照合して草案をレビューする |
 | 1 | providerまたは生成出力の失敗 | 決定論成果物を保持し、原因を確認する |
 | 2 | 設定、入力、coverage、path、言語、既存出力が不正 | ローカル入力・設定を修正する |
@@ -55,7 +55,7 @@ make report-ai \
 ## 決定論的な是正ドラフトコマンド
 
 ```bash
-make remediation-draft FINDINGS=reports/project/timestamp/findings.json
+task remediation-draft FINDINGS=reports/project/timestamp/findings.json
 ```
 
 このコマンドはAI providerやクラウド認証を使いません。同じ完全な点検成果物を検証し、入力と同じ
@@ -67,7 +67,7 @@ CHK-13をversion管理されたローカルレシピへ対応付けます。
 使わず、既存出力を上書きしません。
 
 | 終了コード | 意味 | 呼び出し側の対応 |
-|------------|------|------------------|
+| -- | -- | -- |
 | 0 | 是正ドラフトを書き込んだ | placeholderを埋め、正準findingと照合してレビューする |
 | 2 | 入力、coverage、path、既存出力が不正 | ローカル入力または出力先を修正する |
 

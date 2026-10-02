@@ -14,7 +14,7 @@ authoritative in their linked documents.
 ## Snapshot
 
 | Item | State on 2026-08-10 | Evidence or source |
-|------|---------------------|--------------------|
+| -- | -- | -- |
 | Default branch | Release baseline v2.11.0 | [Release v2.11.0](https://github.com/Yukihide-Mitsuoka/secure-ga4-bq-template/releases/tag/v2.11.0) |
 | Direct parent lock | `terraform-gcp-template` at `8f15dd548ef8dd86192b2bc1440b6ef40fa8bdc2`; PR #308 merged and Issue #309 closed | [Inheritance lock](../.github/inheritance/lock.json), [PR #308](https://github.com/Yukihide-Mitsuoka/secure-ga4-bq-template/pull/308) |
 | IaC governance prerequisite | Complete: exact `iac-scan` succeeded on PR #125 and its merged-main push | [PR run](https://github.com/Yukihide-Mitsuoka/secure-ga4-bq-template/actions/runs/29517379947), [main run](https://github.com/Yukihide-Mitsuoka/secure-ga4-bq-template/actions/runs/29518413106) |
@@ -62,7 +62,7 @@ Google's undelete window. Do not reuse that ID during the window.
 ## Durable results
 
 | Result | Value |
-|--------|-------|
+| -- | -- |
 | Public source | `bigquery-public-data.ga4_obfuscated_sample_ecommerce` in `US` |
 | Actual BigQuery processing | 1,604,088,078 bytes; billed 1,604,321,280 bytes |
 | Dedicated WIF cost gate | Three SQL files passed the 2,000,000,000-byte per-file ceiling |
@@ -80,7 +80,7 @@ sources of truth.
 ## Requirements and plan index
 
 | Read order | File | Purpose |
-|------------|------|---------|
+| -- | -- | -- |
 | 1 | [`AGENTS.md`](../AGENTS.md), [`CLAUDE.md`](../CLAUDE.md), [`.ai/README.md`](../.ai/README.md) | Binding operating protocol and task routing |
 | 2 | [`.ai/guardrails.md`](../.ai/guardrails.md), [`.ai/security.md`](../.ai/security.md) | Absolute prohibitions and security policy |
 | 3 | [`requirements-secure-asset.md`](requirements/requirements-secure-asset.md) | Product scope and B/A/S acceptance ladder |
@@ -102,12 +102,12 @@ Use [Usage](foundation/guides/usage.md), then run:
 gh auth status
 gcloud auth login
 gcloud auth application-default login
-make setup
-make doctor
-make format
-make lint
-make test
-make build
+task setup
+task doctor
+task format
+task lint
+task test
+task build
 git status --short --branch
 ```
 
