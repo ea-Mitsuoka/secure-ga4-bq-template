@@ -6,7 +6,7 @@ errors → exit 2 with a message. Findings themselves never fail the run
 Auth is Application Default Credentials — `gcloud auth application-default
 login` locally, WIF-minted on CI, identical code path.
 
-Invoke via `make inspect PARAMS=<file>` (the canonical entry, CLAUDE.md §11)
+Invoke via `task inspect PARAMS=<file>` (the canonical entry, ADR-0026)
 or `uv run python -m src.modules.inspection.interface.cli ...`.
 """
 

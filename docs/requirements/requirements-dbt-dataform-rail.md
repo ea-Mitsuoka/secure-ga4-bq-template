@@ -72,7 +72,7 @@ dbt / Dataform 双方に staging/marts の雛形と規約、手本モデル各1�
 - 上書きは監査可能な形（設定ファイルに理由コメント付き）で残す。
 
 ### FR-4 Lint/規約
-dbt=SQLFluff、Dataform=組込みフォーマット＋命名規約チェック。置き場所はfoundationの `make lint` 側（cloud認証不要のため gcp-cicd-workflows には置かない原則、本線 §7.2）。
+dbt=SQLFluff、Dataform=組込みフォーマット＋命名規約チェック。置き場所はfoundationの `task lint` 側（cloud認証不要のため gcp-cicd-workflows には置かない原則、本線 §7.2）。
 
 ### FR-5 Terraform連携
 taxonomy/policy tag/dataset/IAM は Terraform 側で作成、モデルconfigはそのタグ名を参照（ID/リソース名の受け渡し方法を定義）。モジュールIFは [design-modules-wif-wiring.md](design-modules-wif-wiring.md) 参照。
@@ -111,7 +111,7 @@ taxonomy/policy tag/dataset/IAM は Terraform 側で作成、モデルconfigは�
 | 4 | 命名規約 | dbt標準準拠（`stg_ga4__* / fct_*・dim_*`を標準とし、必要時だけ`int_*`をintermediateへ分離） | §2.2 |
 | 5 | コストゲート | モデル別の絶対上限（既定値＋上書き） | FR-3 |
 | 6 | Dataform対応 | `bigqueryPolicyTags` ネイティブ対応を確認済（フォールバック不要）。完全リソース名参照・列あたり1タグ | §2.3, FR-2 |
-| 7 | CI配置 | cost-gateは `gcp-cicd-workflows` に新規 `bq-cost-gate.yml`、SQL lintはfoundationの `make lint` 側 | FR-3〜4, 本線 §7.2 |
+| 7 | CI配置 | cost-gateは `gcp-cicd-workflows` に新規 `bq-cost-gate.yml`、SQL lintはfoundationの `task lint` 側 | FR-3〜4, 本線 §7.2 |
 
 ### 未決事項
 1. 既定上限の初期値（例 100GB）と、モデル別上書きの運用ルール。

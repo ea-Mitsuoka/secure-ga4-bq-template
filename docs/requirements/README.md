@@ -183,7 +183,7 @@ Row-level security、Cloud DLP、row値のPII検査、BIツール側のアクセ
 | dry-run以外のBigQuery queryが必要か | `special_conditions.query_jobs_required` |
 | 行データまたは値の検査が必要か | `special_conditions.row_value_inspection_required` |
 
-`make qualify-inspection-scope SCOPE=<file>`は、version管理された標準メニューにこの回答を照合します。
+`task qualify-inspection-scope SCOPE=<file>`は、version管理された標準メニューにこの回答を照合します。
 最終価格、クラウドアクセス承認、点検結果を決める処理ではありません。
 
 ### 4.2 点検パラメータ
@@ -226,7 +226,7 @@ Row-level security、Cloud DLP、row値のPII検査、BIツール側のアクセ
 | dry-run対象SQLと標準byte上限は何か | `BQ_COST_GATE_SQL_GLOB`、`BQ_COST_GATE_DEFAULT_MAX_BYTES` |
 | SQL別の例外予算と理由はあるか | version管理YAMLと`BQ_COST_GATE_BUDGETS_FILE` |
 | Vertex AIで説明草案を生成してよいか | 案件承認、`GOOGLE_CLOUD_PROJECT`、`GOOGLE_CLOUD_LOCATION`、`GA4_BQ_REPORT_MODEL` |
-| レポート言語は何か | `make report-ai REPORT_LANGUAGE=en|ja`。既定は`en` |
+| レポート言語は何か | `task report-ai REPORT_LANGUAGE=en|ja`。既定は`en` |
 | 成果物を誰がどこへ何日保管するか | 案件運用手順。`reports/`はgit管理しない |
 
 WIF provider名やSAメールはTerraform出力をGitHub変数へ接続し、手入力で複製しません。

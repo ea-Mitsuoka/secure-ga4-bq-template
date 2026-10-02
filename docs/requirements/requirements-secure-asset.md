@@ -242,7 +242,7 @@ ai-dev-foundation（万能）→ terraform-gcp-template（GCP層）→ 【secure
 - `terraform-gcp-modules` に **新規モジュールを追加**（既存規約: 1モジュール1ディレクトリ、provider宣言なし、validated inputs、`versions.tf` で google `>=5.0,<8.0`、tag固定 `?ref=vX.Y.Z`）: `bigquery-dataset` / `bigquery-policy-tags` / `bigquery-data-policy` / `log-router-sink` / `bq-inspector-role`。インターフェースは [design-modules-wif-wiring.md](design-modules-wif-wiring.md) 参照。
   - ※ 既存 `github-oidc` は**プロジェクト単位IAMのみ**なので、データセット/テーブル単位の最小権限は新規で作る。
 - `gcp-cicd-workflows` に **新規ワークフローを追加**（house style: `workflow_call`＋WIF＋`setup-gcloud`）: `bq-cost-gate.yml`（dry-runバイト予算ゲート）／`bq-inspect.yml`（オンデマンド読み取り点検。`service_account` にインスペクタ最小権限SA〔FR-6〕を渡す）。
-- SQL lint（SQLFluff/`dataform format`）は、gcp-cicd-workflowsの設計原則（cloud認証が要るものだけを置く）に従い **foundationの `make lint` 側**に置く。
+- SQL lint（SQLFluff/`dataform format`）は、gcp-cicd-workflowsの設計原則（cloud認証が要るものだけを置く）に従い **foundationの `task lint` 側**に置く。
 
 **要配線（テンプレに未整備＝追加作業）**
 - `terraform-gcp-template` は **WIF/apply自動化を配線していない**（CIは自己完結のmake呼び出し）。`github-oidc` モジュール＋`gcp-cicd-workflows/tf-apply` を明示的に配線する必要がある。

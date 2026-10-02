@@ -35,8 +35,8 @@ safety boundaries, is available in the [Japanese usage guide](docs/usage.md).
    is applied before a linear-history Ruleset so every intermediate state remains valid.
    `scripts/setup-github.sh` is a compatibility wrapper for the same `plan` and exactly
    confirmed `apply` paths; it contains no independent governance policy.
-5. **Install local gates**: `make setup`.
-6. **Verify**: `make doctor && make build`.
+5. **Install local gates**: `task setup`.
+6. **Verify**: `task doctor && task build`.
 
 ## Position in the template chain
 
@@ -49,7 +49,7 @@ ai-dev-foundation ─sync▶ terraform-gcp-template ─sync▶ secure-ga4-bq-tem
 ```
 
 | Decision | Rule |
-|----------|------|
+| -- | -- |
 | New GA4→BQ secure-mart engagement? | "Use this template" **here** — one repo per engagement |
 | Plain GCP/Terraform project (no GA4 asset)? | Use [terraform-gcp-template](https://github.com/ea-Mitsuoka/terraform-gcp-template) |
 | Reusable Terraform building blocks | [terraform-gcp-modules](https://github.com/ea-Mitsuoka/terraform-gcp-modules), referenced by tag, never copied |
@@ -59,7 +59,7 @@ ai-dev-foundation ─sync▶ terraform-gcp-template ─sync▶ secure-ga4-bq-tem
 ## What this adds on top of terraform-gcp-template
 
 | Addition | Location | Status |
-|----------|----------|--------|
+| -- | -- | -- |
 | Normative requirements (build / inspect modes; 11 security checkpoints plus CHK-12/CHK-13 metadata governance; dbt/Dataform rail) | [`docs/requirements/`](docs/requirements/README.md) | implemented baseline |
 | GA4 sensitivity catalog + structured promotion-source declarations and `event_params` unnest examples | [Catalog guide](catalog/README.md) + [`ga4-sensitivity.yml`](catalog/ga4-sensitivity.yml) + exemplar in [`profiles/dbt-bigquery/skeleton/`](profiles/dbt-bigquery/skeleton/) | implemented |
 | Secure-mart build rail (Terraform datasets/taxonomy plus profile-copy engine selection) | [`infra/envs/dev/`](infra/README.md); [`profiles/dbt-bigquery/`](profiles/dbt-bigquery/README.md); [`profiles/dataform-bigquery/`](profiles/dataform-bigquery/README.md) | implemented |
@@ -91,14 +91,14 @@ without GCP credentials, customer data, or an AI request.
 Run the deterministic, read-only inspection first:
 
 ```bash
-make inspect PARAMS=inspection-params.yml OUT=reports
+task inspect PARAMS=inspection-params.yml OUT=reports
 ```
 
 AI reporting is optional. Configure ADC plus the variables in `.env.example`, then point
 it at the generated artifact:
 
 ```bash
-make report-ai \
+task report-ai \
   FINDINGS=reports/<project>/<timestamp>/findings.json \
   REPORT_LANGUAGE=ja
 ```
@@ -119,7 +119,7 @@ transformation's SQL lineage.
 Render the separate non-applying remediation attachment without cloud credentials:
 
 ```bash
-make remediation-draft FINDINGS=reports/<project>/<timestamp>/findings.json
+task remediation-draft FINDINGS=reports/<project>/<timestamp>/findings.json
 ```
 
 `remediation-draft.md` uses deterministic local recipes and explicit placeholders. It is
@@ -128,7 +128,7 @@ review material, not an apply-ready Terraform file.
 Render the customer-facing standard inspection menu without cloud credentials:
 
 ```bash
-make render-inspection-menu
+task render-inspection-menu
 ```
 
 The command reads `service-packages/inspection-standard.yml` and writes
@@ -140,7 +140,7 @@ overwritten.
 Qualify the anonymous example scope against that same profile:
 
 ```bash
-make qualify-inspection-scope
+task qualify-inspection-scope
 ```
 
 For an engagement, copy and edit `engagement-scope.example.yml`, then pass its path as

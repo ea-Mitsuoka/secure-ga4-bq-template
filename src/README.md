@@ -27,7 +27,7 @@ internals — cross-module calls use the target's MODULE.md public API or events
 
 [`modules/inspection/`](modules/inspection/MODULE.md) is this repo's real bounded
 context: the FR-4 inspection engine (ADR-0003). **Imitate its shape** (COD-050) when
-adding modules. Run its tests via `make test-unit`.
+adding modules. Run its tests via `task test-unit`.
 
 The template's original worked example (`modules/catalog/`, a Python product-catalog
 demo) was deleted when this real module landed, per its own instruction and LOG-0014

@@ -6,7 +6,7 @@ title: Runtime configuration
 # Runtime configuration
 
 | Variable | Required | Source | Purpose |
-|----------|----------|--------|---------|
+| -- | -- | -- | -- |
 | `GOOGLE_CLOUD_PROJECT` | AI report only | local environment or CI variable | Vertex AI quota project |
 | `GOOGLE_CLOUD_LOCATION` | AI report only | local environment or CI variable | Vertex AI request location |
 | `GA4_BQ_REPORT_MODEL` | no | local environment or CI variable | model ID; defaults to `gemini-2.5-flash` |
@@ -25,7 +25,7 @@ The caller [`.github/workflows/bq-inspect.yml`](../../.github/workflows/bq-inspe
 uses `gcp-cicd-workflows@v1` and the following repository variables:
 
 | Variable | Required | Purpose |
-|----------|----------|---------|
+| -- | -- | -- |
 | `WIF_PROVIDER` | yes | Workload Identity provider resource name from Terraform output |
 | `INSPECTOR_SA` | yes | Dedicated read-only inspector service account email |
 | `BQ_INSPECT_ENABLED` | schedule only | Set to `true` after a successful manual run to enable the weekly schedule |
@@ -43,7 +43,7 @@ ADR-0006 gives the BigQuery dry-run gate a provider and service account separate
 both deployment and inspection. Configure these Terraform inputs before apply:
 
 | Terraform input | Required | Purpose |
-|-----------------|----------|---------|
+| -- | -- | -- |
 | `layer_dataset_ids` | shared target project | Explicit staging/intermediate/marts dataset IDs; use three unique values to prevent collisions with unrelated datasets |
 | `github_repository_id` | yes per engagement | Immutable numeric ID of the caller repository; names are not accepted as the security boundary |
 | `github_workload_identity_pool_id` | when `github` is unavailable | GitHub Actions WIF pool ID; override when the project already has or recently deleted the default pool |
@@ -57,7 +57,7 @@ teardown rules in the [Dataform profile](../../profiles/dataform-bigquery/README
 After apply, set the following repository variables for the cost-gate caller:
 
 | Variable | Source | Purpose |
-|----------|--------|---------|
+| -- | -- | -- |
 | `COST_GATE_WIF_PROVIDER` | Terraform output `cost_gate_workload_identity_provider` | Provider restricted to the caller repository ID and trusted reusable workflow |
 | `COST_GATE_SA` | Terraform output `cost_gate_sa_email` | Dedicated dry-run identity with project Job User and dataset-scoped Data Viewer |
 
@@ -65,7 +65,7 @@ The caller is [`.github/workflows/bq-cost-gate.yml`](../../.github/workflows/bq-
 Keep it disabled until every required value below is configured:
 
 | Repository variable | Required | Purpose |
-|---------------------|----------|---------|
+| -- | -- | -- |
 | `GCP_PROJECT_ID` | yes | Project billed for BigQuery dry-run jobs |
 | `BQ_COST_GATE_SQL_GLOB` | yes | Relative glob of regular compiled SQL files produced inside the checkout |
 | `BQ_COST_GATE_COMPILE_COMMAND` | when SQL is generated | Credential-free command backed by a checked-in target and lockfile-pinned tooling |
@@ -73,8 +73,11 @@ Keep it disabled until every required value below is configured:
 | `BQ_COST_GATE_BUDGETS_FILE` | no | Relative YAML file containing reviewed path-specific overrides and reasons |
 | `BQ_COST_GATE_ENABLED` | last | Set to `true` only after the other values and dataset grants are ready |
 
-For the Dataform profile, use `make compile-cost-gate` and
-`transform/target/compiled/**/*.sql` for the compile command and SQL glob. The target
+For the Dataform profile, use
+`bash scripts/actions/setup-task/install.sh "$RUNNER_TEMP/task-bin" && "$RUNNER_TEMP/task-bin/task" compile-cost-gate`
+and `transform/target/compiled/**/*.sql` for the compile command and SQL glob. The
+reusable workflow's compile job does not ship go-task, so the command first installs the
+pinned, checksum-verified release (ADR-0026). The task
 installs only the lockfile, compiles without ADC, and exports executable queries from
 the Dataform graph. dbt `compile` is not the credential-free default because its
 BigQuery adapter initializes ADC even when introspection and cache population are off.
@@ -99,7 +102,7 @@ Column masking is disabled when Terraform `data_policies` is empty. When an enga
 approves masking, configure each authorization boundary independently:
 
 | Reader behavior | Dataset access | Policy access |
-|-----------------|----------------|---------------|
+| -- | -- | -- |
 | Cleartext | `roles/bigquery.dataViewer` | `roles/datacatalog.categoryFineGrainedReader` on the matching policy tag |
 | Masked | `roles/bigquery.dataViewer` | `roles/bigquerydatapolicy.maskedReader` on the matching data policy |
 | Denied control | `roles/bigquery.dataViewer` | Neither policy role |

@@ -14,7 +14,7 @@ local-only and remains separate from technical inspection and report generation 
 ## Public API
 
 | Entry point | Layer | Description |
-|-------------|-------|-------------|
+| -- | -- | -- |
 | `MenuProfile`, `FeeRange`, `CapacityLimits`, `LabeledItem` | domain | Immutable service-menu vocabulary and validation |
 | `EngagementScope`, `ScopeCounts`, `QualificationResult`, `QualificationReason` | domain | Immutable preflight input and complete qualification result |
 | `evaluate_scope(profile, scope)` | domain | Decide standard-package eligibility and every separate-estimate reason |
@@ -24,8 +24,8 @@ local-only and remains separate from technical inspection and report generation 
 | `YamlEngagementScopeRepository.load(path)` | infrastructure | Load and strictly validate a schema-v1 anonymous scope input |
 | `MarkdownMenuWriter.write(profile, out_dir)` | infrastructure | Atomically render a customer-facing menu without overwriting existing output |
 | `QualificationArtifactWriter.write(result, out_dir)` | infrastructure | Publish deterministic JSON/Markdown as a rollback-safe pair |
-| `render_menu_cli.main(argv)` | interface | Local CLI used by `make render-inspection-menu` |
-| `qualify_cli.main(argv)` | interface | Local CLI used by `make qualify-inspection-scope` |
+| `render_menu_cli.main(argv)` | interface | Local CLI used by `task render-inspection-menu` |
+| `qualify_cli.main(argv)` | interface | Local CLI used by `task qualify-inspection-scope` |
 
 ## Events
 
@@ -60,5 +60,5 @@ not customer names, project IDs, credentials, or row values.
 ## Dependencies
 
 | Uses | Via | Why |
-|------|-----|-----|
+| -- | -- | -- |
 | PyYAML | infrastructure adapter | Parse the existing repository YAML format |
