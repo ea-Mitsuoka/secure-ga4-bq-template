@@ -17,5 +17,5 @@ documentation, Terraform configuration, source, and tests remain protected child
 paths.
 
 Change the export only through a reviewed contract PR. Validate it with the repository
-governance tests and `make doctor`. Creating or enabling a remote repository, applying
+governance tests and `task doctor`. Creating or enabling a remote repository, applying
 GitHub governance, and running Terraform remain separate authenticated operations.
