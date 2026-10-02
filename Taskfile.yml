@@ -1,0 +1,183 @@
+# Canonical command interface (ADR-0026; contract: .ai/contracts/foundation/task-targets.md)
+# for this template's two toolchains (ADR-0003): Terraform roots under infra/envs/<env>/
+# (modules referenced by tag) and the Python inspection engine under
+# src/modules/inspection (uv-managed).
+# The heavier layered-foundations reference stays available in profiles/terraform-gcp/.
+version: "3"
+
+vars:
+  FILE: '{{.FILE | default ""}}'
+  ENV: '{{.ENV | default "dev"}}'
+  PARAMS: '{{.PARAMS | default "inspection-params.yml"}}'
+  FINDINGS: '{{.FINDINGS | default "findings.json"}}'
+  REPORT_LANGUAGE: '{{.REPORT_LANGUAGE | default "en"}}'
+  MENU_PROFILE: '{{.MENU_PROFILE | default "service-packages/inspection-standard.yml"}}'
+  MENU_OUT: '{{.MENU_OUT | default "reports/service-packaging"}}'
+  SCOPE: '{{.SCOPE | default "engagement-scope.example.yml"}}'
+
+tasks:
+  default:
+    desc: List available tasks
+    silent: true
+    cmds:
+      - task --list
+
+  setup:
+    desc: "Install toolchain: python deps (uv sync) + git hooks — idempotent"
+    cmds:
+      - uv sync
+      - cmd: |
+          if command -v pre-commit >/dev/null 2>&1; then pre-commit install --hook-type pre-commit --hook-type pre-push; else echo "pre-commit not installed — local hooks skipped (CI runs the same gates)"; fi
+        silent: true
+
+  format:
+    desc: Auto-format terraform + python (all, or FILE=<path>)
+    cmds:
+      - cmd: terraform fmt -recursive infra
+        if: '[ -z "{{.FILE}}" ]'
+      - cmd: uv run ruff format .
+        if: '[ -z "{{.FILE}}" ]'
+      - cmd: uv run ruff check --fix-only .
+        if: '[ -z "{{.FILE}}" ]'
+      - cmd: terraform fmt "{{.FILE}}"
+        if: '{{if or (hasSuffix ".tf" .FILE) (hasSuffix ".tfvars" .FILE)}}true{{else}}false{{end}}'
+      - cmd: uv run ruff format "{{.FILE}}"
+        if: '{{if hasSuffix ".py" .FILE}}true{{else}}false{{end}}'
+      - cmd: uv run ruff check --fix-only "{{.FILE}}"
+        if: '{{if hasSuffix ".py" .FILE}}true{{else}}false{{end}}'
+
+  lint:
+    desc: Check-only, zero warnings (COD-001); never fixes
+    cmds:
+      - terraform fmt -check -recursive infra
+      - cmd: |
+          if command -v tflint >/dev/null 2>&1; then tflint --recursive --chdir infra; else echo "tflint not installed — CI still enforces it"; fi
+        silent: true
+      - uv run ruff format --check .
+      - uv run ruff check .
+      - uv run mypy src
+
+  test:
+    desc: Full suite
+    cmds:
+      - task: test-unit
+      - task: test-integration
+
+  test-unit:
+    desc: "Fast gate for pre-push: terraform fmt check + python unit tier"
+    cmds:
+      - terraform fmt -check -recursive infra
+      - uv run pytest tests --ignore-glob="**/integration/**"
+
+  test-integration:
+    desc: terraform test dirs + python integration tier (when present)
+    vars:
+      TEST_DIRS:
+        sh: find infra -name '*.tftest.hcl' -exec dirname {} \; | sort -u
+    cmds:
+      - for: { var: TEST_DIRS }
+        cmd: echo "Testing {{.ITEM}}..." && cd "{{.ITEM}}" && terraform init -backend=false -input=false >/dev/null && terraform test
+      - cmd: |
+          if find tests -path '*/integration/*' -name 'test_*.py' 2>/dev/null | grep -q .; then uv run pytest tests --ignore-glob="**/unit/**"; else echo "no python integration tests yet — unit tier is the gate"; fi
+        silent: true
+
+  coverage:
+    desc: Python tests with coverage (TST-003 ratchet; domain/application ≥ 80%)
+    cmds:
+      - uv run pytest tests --cov=src --cov-report=term-missing --cov-report=xml
+
+  build:
+    desc: "Credential-free gates: terraform validate every env + uv lockfile consistency"
+    vars:
+      ENV_DIRS:
+        sh: find infra/envs -mindepth 1 -maxdepth 1 -type d | sort
+    cmds:
+      - for: { var: ENV_DIRS }
+        cmd: echo "Validating {{.ITEM}}..." && cd "{{.ITEM}}" && terraform init -backend=false -input=false >/dev/null && terraform validate
+      - uv lock --check
+
+  run:
+    desc: For IaC, "run" shows the plan; the inspection engine runs via `task inspect`
+    cmds:
+      - task: plan
+
+  plan:
+    desc: Plan the selected env (ENV=dev by default; needs credentials + backend)
+    dir: infra/envs/{{.ENV}}
+    cmds:
+      - terraform init -input=false
+      - terraform plan
+
+  # ---------------------------------------------------------------------------
+  # Project extensions — inspection engine (read-only; needs ADC credentials)
+  # ---------------------------------------------------------------------------
+
+  inspect:
+    desc: Run the FR-4 inspection (PARAMS=<engagement yaml> [OUT=reports] [FAIL_ON=HIGH])
+    vars:
+      OUT: '{{.OUT | default "reports"}}'
+    cmds:
+      - >-
+        uv run python -m src.modules.inspection.interface.cli
+        --params "{{.PARAMS}}" --out-dir "{{.OUT}}"
+        {{if .FAIL_ON}}--fail-on {{.FAIL_ON}}{{end}}
+
+  report-ai:
+    desc: Generate advisory AI Markdown (FINDINGS=<json> [OUT=<dir>] [REPORT_LANGUAGE=en|ja])
+    cmds:
+      - >-
+        uv run python -m src.modules.reporting.interface.cli
+        --input "{{.FINDINGS}}" --language "{{.REPORT_LANGUAGE}}"
+        {{if .OUT}}--out-dir "{{.OUT}}"{{end}}
+
+  remediation-draft:
+    desc: Render non-applying remediation Markdown (FINDINGS=<json> [OUT=<dir>])
+    cmds:
+      - >-
+        uv run python -m src.modules.reporting.interface.remediation_cli
+        --input "{{.FINDINGS}}" {{if .OUT}}--out-dir "{{.OUT}}"{{end}}
+
+  render-inspection-menu:
+    desc: Render customer menu (MENU_PROFILE=<yaml> [MENU_OUT=<dir>])
+    cmds:
+      - >-
+        uv run python -m src.modules.service_packaging.interface.render_menu_cli
+        --profile "{{.MENU_PROFILE}}" --out-dir "{{.MENU_OUT}}"
+
+  qualify-inspection-scope:
+    desc: Qualify scope (SCOPE=<yaml> [MENU_PROFILE=<yaml>] [MENU_OUT=<dir>])
+    cmds:
+      - >-
+        uv run python -m src.modules.service_packaging.interface.qualify_cli
+        --profile "{{.MENU_PROFILE}}" --scope "{{.SCOPE}}" --out-dir "{{.MENU_OUT}}"
+
+  security-scan:
+    desc: "Local sweep: secrets + IaC misconfig + python dependency vulns"
+    silent: true
+    cmds:
+      - |
+        if command -v gitleaks >/dev/null 2>&1; then gitleaks detect --no-banner; else echo "gitleaks not installed — CI still enforces SEC-002"; fi
+      - |
+        if command -v trivy >/dev/null 2>&1; then trivy config --exit-code 1 infra && trivy fs --scanners vuln --exit-code 1 uv.lock; else echo "trivy not installed — CI still enforces SEC-030"; fi
+
+  sbom:
+    desc: SBOM (SPDX + CycloneDX) into dist/ — REL-020
+    silent: true
+    cmds:
+      - mkdir -p dist
+      - |
+        if command -v syft >/dev/null 2>&1; then syft . -o spdx-json=dist/sbom.spdx.json -o cyclonedx-json=dist/sbom.cdx.json && echo "SBOM written to dist/"; else echo "syft not installed — release workflow generates the authoritative SBOM"; fi
+
+  clean:
+    desc: Remove caches/artifacts inside the workspace only (GR-031)
+    cmds:
+      - find infra -type d -name ".terraform" -exec rm -rf {} + 2>/dev/null || true
+      - rm -rf dist htmlcov .coverage coverage.xml .pytest_cache .ruff_cache .mypy_cache
+      - find src tests -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+
+  doctor:
+    desc: "Foundation self-check: metadata invariants + guard-hook tests"
+    silent: true
+    cmds:
+      - bash scripts/template-check.sh
+      - bash .claude/hooks/tests/guard-bash.test.sh
