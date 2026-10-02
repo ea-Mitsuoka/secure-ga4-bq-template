@@ -6,7 +6,7 @@ title: Terraform layout
 # infra/ — Terraform root configurations
 
 | Path | Role |
-|------|------|
+| -- | -- |
 | `envs/<env>/` | One root config per environment (start: `dev`). State and providers live here |
 
 Rules:
@@ -18,7 +18,7 @@ Rules:
   a module worth writing is worth contributing to the library.
 - Truly project-specific glue (a one-off resource, a local wrapper) may live beside the
   env's `main.tf`; if it grows reusable, promote it to the library (rule of three, COD-020).
-- `make build` validates every env without credentials; `make plan ENV=dev` needs
+- `task build` validates every env without credentials; `task plan ENV=dev` needs
   credentials and a configured backend (`versions.tf`).
 
 ## This template's dev env

@@ -27,10 +27,10 @@ command, or error contract. Breaking contract changes additionally require the
 ## Structure
 
 | File | Content |
-|------|---------|
+| -- | -- |
 | `openapi.yaml` | HTTP API contract (source of truth) |
 | `events.md` / `asyncapi.yaml` | Published/consumed events |
-| [`report-ai-cli.md`](report-ai-cli.md) | `make report-ai` inputs, outputs, auth, and exit codes |
+| [`report-ai-cli.md`](report-ai-cli.md) | `task report-ai` inputs, outputs, auth, and exit codes |
 | `errors.md` | Error catalog: code → meaning → caller action |
 | `changelog.md` | Contract-level changes and deprecation schedule |
 
@@ -39,7 +39,7 @@ command, or error contract. Breaking contract changes additionally require the
 `scripts/github_governance.py` resolves the inherited policy and exposes four commands:
 
 | Command | Authentication | Behavior | Exit codes |
-|---------|----------------|----------|------------|
+| -- | -- | -- | -- |
 | `validate` | none | offline policy validation | 0 valid; 2 error |
 | `plan` | repository read; Administration read for complete vulnerability-alert state | GET-only redacted comparison | 0 complete; 2 error |
 | `audit` | same as `plan` | same GET-only comparison as a compliance gate | 0 compliant; 1 drift/unknown; 2 error |
@@ -68,7 +68,7 @@ The command's availability does not authorize a live run.
 ## Engagement qualification CLI
 
 ```bash
-make qualify-inspection-scope \
+task qualify-inspection-scope \
   MENU_PROFILE=service-packages/inspection-standard.yml \
   SCOPE=engagement-scope.example.yml \
   MENU_OUT=reports/service-packaging
@@ -79,7 +79,7 @@ profile. It requires no authentication, cloud access, AI provider, or environmen
 variable.
 
 | Input | Default | Validation |
-|-------|---------|------------|
+| -- | -- | -- |
 | `MENU_PROFILE` | `service-packages/inspection-standard.yml` | complete schema-v1 profile with all evaluator condition IDs |
 | `SCOPE` | `engagement-scope.example.yml` | positive counts, Boolean special-condition flags, and no unknown fields |
 | `MENU_OUT` | `reports/service-packaging` | writable local directory without either output filename |
@@ -90,7 +90,7 @@ output fails before publication; a pair-publication failure rolls back files cre
 that invocation.
 
 | Exit | Meaning | Caller action |
-|------|---------|---------------|
+| -- | -- | -- |
 | 0 | both artifacts written | review the qualification before preparing a proposal |
 | 2 | invalid/missing input, existing output, or local I/O failure | correct the named path or field and rerun in an empty output location |
 
