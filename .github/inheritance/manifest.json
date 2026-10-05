@@ -44,7 +44,6 @@
     "scripts/pr_language_policy.py",
     "scripts/template_inheritance.py",
     "scripts/template_sync_auth.py",
-    "scripts/canonical-target.sh",
     "scripts/taskfile_profile.py",
     "docs/foundation/"
   ],
@@ -66,7 +65,6 @@
     ".templatesyncignore",
     "CHANGELOG.md",
     "CLAUDE.md",
-    "Makefile",
     "README.md",
     "Taskfile.yml",
     "catalog/",
@@ -78,7 +76,6 @@
     "scripts/context_budget.py",
     "scripts/export_dataform_sql.py",
     "scripts/github_governance.py",
-    "scripts/makefile_profile.py",
     "scripts/pr_size_policy.py",
     "scripts/readme_ownership.py",
     "scripts/run-foundation-tests.sh",

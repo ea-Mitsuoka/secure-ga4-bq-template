@@ -12,12 +12,10 @@ scripts/**
 :!scripts/pr_language_policy.py
 :!scripts/template_inheritance.py
 :!scripts/template_sync_auth.py
-:!scripts/canonical-target.sh
 :!scripts/taskfile_profile.py
 service-packages/**
 CLAUDE.md
 README.md
-Makefile
 Taskfile.yml
 CHANGELOG.md
 .env.example

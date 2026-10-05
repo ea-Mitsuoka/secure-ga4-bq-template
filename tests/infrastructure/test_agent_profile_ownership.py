@@ -112,7 +112,9 @@ def test_parent_script_tests_are_an_explicit_leaf_boundary() -> None:
     assert not (ROOT / "scripts/tests/test_local_workflow_actions.py").exists()
 
 
-def test_python_inheritance_tools_remain_leaf_adapted_boundaries() -> None:
+def test_removed_make_tooling_has_no_ownership_entry() -> None:
+    # ADR-0026 contract phase: the Makefile, its profile validator, and the runner
+    # dispatcher are gone, so neither ownership list nor the sync boundary names them.
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     ignored = {
         line.strip()
@@ -120,10 +122,12 @@ def test_python_inheritance_tools_remain_leaf_adapted_boundaries() -> None:
         if line.strip() and not line.lstrip().startswith("#")
     }
 
-    path = "scripts/makefile_profile.py"
-    assert path in manifest["protected_paths"]
-    assert path not in manifest["inherited_paths"]
-    assert f":!{path}" not in ignored
+    for path in ("Makefile", "scripts/makefile_profile.py", "scripts/canonical-target.sh"):
+        assert path not in manifest["protected_paths"]
+        assert path not in manifest["inherited_paths"]
+        assert path not in ignored
+        assert f":!{path}" not in ignored
+        assert not (ROOT / path).exists()
 
 
 def test_inheritance_tool_is_inherited_through_both_transports() -> None:

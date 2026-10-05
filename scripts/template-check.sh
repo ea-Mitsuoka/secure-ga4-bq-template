@@ -12,8 +12,7 @@
 #   4. Child repositories with a manifest satisfy the local inheritance and legacy
 #      Template Sync protection contract.
 #   5. Declared AI context routes remain structurally valid and report measured budgets.
-#   6. Required canonical targets (Taskfile.yml, or the Makefile before ADR-0026's
-#      migration) have repository-owned implementations.
+#   6. Required canonical targets in Taskfile.yml have repository-owned implementations.
 #   7. Root README ownership is valid when marked; legacy missing markers remain warnings.
 
 set -u
@@ -59,16 +58,10 @@ fi
 python3 scripts/context_budget.py validate --root . || \
   err "AI context routes or budgets are invalid (ADR-0012)"
 
-# 6. Required canonical targets must not retain Foundation template placeholders.
-# ADR-0026: a root Taskfile.yml is validated by taskfile_profile.py; without one the
-# repository keeps the Makefile check until the foundation's contract phase.
-if [ -f Taskfile.yml ]; then
-  python3 scripts/taskfile_profile.py --root . || \
-    err "Required canonical targets retain unresolved template placeholders"
-else
-  python3 scripts/makefile_profile.py --root . || \
-    err "Required canonical targets retain unresolved template placeholders"
-fi
+# 6. Required canonical targets in the root Taskfile.yml must not retain Foundation
+# template placeholders (ADR-0026).
+python3 scripts/taskfile_profile.py --root . || \
+  err "Required canonical targets retain unresolved template placeholders"
 
 # 7. ADR-0011: detect ownership mismatches without moving or rewriting files. Existing
 # repositories without a marker receive a warning so rule propagation does not force a
