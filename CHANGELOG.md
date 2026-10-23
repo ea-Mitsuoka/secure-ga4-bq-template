@@ -1,5 +1,15 @@
 # Changelog
 
+## [4.0.1](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/compare/v4.0.0...v4.0.1) (2026-10-23)
+
+
+### Bug Fixes
+
+* **deps:** update certifi to 2026.10.19 for GHSA-6q48-6c7w-9gw2 ([6ff838e](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/commit/6ff838e68cd803ca16e6ae7674fdb135c568114c))
+* **deps:** update certifi to 2026.10.19 for GHSA-6q48-6c7w-9gw2 ([afa8606](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/commit/afa8606cd525d34c248467f292245d1050ed6396))
+* **hooks:** match only the push's own arguments in the GR-010 guard ([14cf4c5](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/commit/14cf4c5f5582e0a10ae0e639314ca8aa05f62036))
+* **hooks:** match only the push's own arguments in the GR-010 guard ([a7aaf92](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/commit/a7aaf9210b18ae4f4516ada8ba883232fa607e16))
+
 ## [4.0.0](https://github.com/ea-Mitsuoka/secure-ga4-bq-template/compare/v3.1.2...v4.0.0) (2026-10-02)
 
 
