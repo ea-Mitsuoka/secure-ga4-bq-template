@@ -30,6 +30,7 @@
     ".github/PULL_REQUEST_TEMPLATE.md",
     ".github/dependabot.yml",
     ".github/discussion-categories.md",
+    ".github/governance/README.md",
     ".github/governance/foundation.json",
     ".github/governance/profiles/",
     ".github/inheritance/README.md",
